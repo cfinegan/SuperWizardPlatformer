@@ -1,4 +1,6 @@
 ﻿using System;
+using System.IO;
+using System.Runtime;
 
 namespace SuperWizardPlatformer
 {
@@ -14,8 +16,31 @@ namespace SuperWizardPlatformer
         [STAThread]
         static void Main()
         {
-            using (var game = new Game1())
-                game.Run();
+            string currentFolderPath = Environment.CurrentDirectory;
+            string projectFolderPath = currentFolderPath.Substring(0, currentFolderPath.IndexOf("bin"));
+            string logFilePath = string.Format("{0}{1}", projectFolderPath, "SuperWizardPlatformer.log");
+
+            using (var logFile = new StreamWriter(logFilePath))
+            {
+                // Re-route all console output to log.
+                Console.SetOut(logFile);
+                Console.SetError(logFile);
+
+                // Change process-wide settings.
+                GCSettings.LatencyMode = GCLatencyMode.SustainedLowLatency;
+
+                // Write start-of-process info to log.
+                Console.WriteLine("SuperWizardPlatformer v0.1");
+                Console.WriteLine("Running {0}-bit process on {1}-bit system",
+                    Environment.Is64BitProcess ? 64 : 32,
+                    Environment.Is64BitOperatingSystem ? 64 : 32);
+                Console.WriteLine("GCLatencyMode: {0}", GCSettings.LatencyMode);
+
+                using (var game = new Game1())
+                {
+                    game.Run();
+                }
+            }
         }
     }
 #endif
