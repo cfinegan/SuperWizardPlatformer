@@ -11,6 +11,7 @@ namespace SuperWizardPlatformer
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
+        Scene scene;
 
         public Game1()
         {
@@ -41,6 +42,7 @@ namespace SuperWizardPlatformer
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
             // TODO: use this.Content to load your game content here
+            scene = new Scene(this, "dtest");
         }
 
         /// <summary>
@@ -50,6 +52,7 @@ namespace SuperWizardPlatformer
         protected override void UnloadContent()
         {
             // TODO: Unload any non ContentManager content here
+            if (scene != null) { scene.Dispose(); }
         }
 
         /// <summary>
@@ -76,6 +79,7 @@ namespace SuperWizardPlatformer
             GraphicsDevice.Clear(Color.Black);
 
             // TODO: Add your drawing code here
+            scene.Draw(gameTime);
 
             base.Draw(gameTime);
         }
