@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System;
 
 namespace SuperWizardPlatformer
 {
@@ -11,7 +12,7 @@ namespace SuperWizardPlatformer
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
-        Scene scene;
+        IScene scene;
 
         public Game1()
         {
@@ -28,6 +29,15 @@ namespace SuperWizardPlatformer
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
+            IsMouseVisible = true;
+
+            graphics.PreferredBackBufferWidth = 640;
+            graphics.PreferredBackBufferHeight = 480;
+            graphics.ApplyChanges();
+
+            Console.WriteLine("BackbufferWidth: {0}", graphics.PreferredBackBufferWidth);
+            Console.WriteLine("BackbufferHeight: {0}", graphics.PreferredBackBufferHeight);
+            Console.WriteLine("IsFixedTimeStep: {0}", IsFixedTimeStep);
 
             base.Initialize();
         }
@@ -42,7 +52,7 @@ namespace SuperWizardPlatformer
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
             // TODO: use this.Content to load your game content here
-            scene = new Scene(this, "dtest");
+            scene = new Scene(this, "mario_test");
         }
 
         /// <summary>
@@ -76,10 +86,8 @@ namespace SuperWizardPlatformer
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.Black);
-
             // TODO: Add your drawing code here
-            scene.Draw(gameTime);
+            scene.Draw(GraphicsDevice, gameTime);
 
             base.Draw(gameTime);
         }

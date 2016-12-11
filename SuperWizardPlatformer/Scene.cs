@@ -6,27 +6,36 @@ using System;
 
 namespace SuperWizardPlatformer
 {
-    class Scene : IDisposable
+    class Scene : IDisposable, IScene
     {
-        /// <summary>
-        /// Content Manager for this scene. Manages lifetimes for all content that is scene-specific.
-        /// </summary>
-        public ContentManager Content { get; private set; }
-
+        private ContentManager content;
         private TiledMap tmxData;
         private SpriteBatch spriteBatch;
+        private Color bgColor = Color.Black;
+
+        public bool IsReadyToQuit { get; private set; } = false;
 
         public Scene(Game game, string mapName)
         {
-            Content = new ContentManager(game.Services, game.Content.RootDirectory);
+            content = new ContentManager(game.Services, game.Content.RootDirectory);
             spriteBatch = new SpriteBatch(game.GraphicsDevice);
-            tmxData = Content.Load<TiledMap>(mapName);
+
+            tmxData = content.Load<TiledMap>(mapName);
+
+            Console.WriteLine("Loading map: {0}", mapName);
             Console.WriteLine("Map width: {0}px", tmxData.WidthInPixels);
             Console.WriteLine("Map height: {0}px", tmxData.HeightInPixels);
+
+            if (tmxData.BackgroundColor != null)
+            {
+                bgColor = (Color)tmxData.BackgroundColor;
+            }
         }
 
-        public void Draw(GameTime gameTime)
+        public void Draw(GraphicsDevice graphicsDevice, GameTime gameTime)
         {
+            graphicsDevice.Clear(bgColor);
+
             spriteBatch.Begin();
             tmxData.Draw(spriteBatch, new Rectangle(0, 0, tmxData.WidthInPixels, tmxData.HeightInPixels));
             spriteBatch.End();
@@ -42,7 +51,7 @@ namespace SuperWizardPlatformer
                 if (disposing)
                 {
                     // TODO: dispose managed state (managed objects).
-                    Content.Dispose();
+                    content.Dispose();
                 }
 
                 // TODO: free unmanaged resources (unmanaged objects) and override a finalizer below.
@@ -65,6 +74,11 @@ namespace SuperWizardPlatformer
             Dispose(true);
             // TODO: uncomment the following line if the finalizer is overridden above.
             // GC.SuppressFinalize(this);
+        }
+
+        public void Update(GameTime gameTime)
+        {
+            throw new NotImplementedException();
         }
         #endregion
     }
