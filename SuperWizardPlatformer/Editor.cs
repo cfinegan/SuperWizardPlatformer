@@ -16,7 +16,7 @@ namespace SuperWizardPlatformer
 
         public Editor(Game game, string mapName)
         {
-            string mapInfoPath = string.Format("{0}{1}.json", Program.ProjectFolderPath, mapName);
+            string mapInfoPath = string.Format("{0}.json", mapName);
             Console.WriteLine(mapInfoPath);
             Console.Out.Flush();
             MapInfo jsonData = JsonConvert.DeserializeObject<MapInfo>(File.ReadAllText(mapInfoPath));

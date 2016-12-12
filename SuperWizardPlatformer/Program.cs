@@ -16,9 +16,7 @@ namespace SuperWizardPlatformer
         [STAThread]
         static void Main()
         {
-            string logFilePath = string.Format("{0}{1}", ProjectFolderPath, "SuperWizardPlatformer.log");
-
-            using (var logFile = new StreamWriter(logFilePath))
+            using (var logFile = new StreamWriter("SuperWizardPlatformer.log"))
             {
                 // Re-route all console output to log.
                 Console.SetOut(logFile);
@@ -38,18 +36,6 @@ namespace SuperWizardPlatformer
                 {
                     game.Run();
                 }
-            }
-        }
-
-        public static string ProjectFolderPath
-        {
-            get
-            {
-                string currentFolderPath = Environment.CurrentDirectory;
-                string projectFolderPath =
-                    currentFolderPath.Substring(0, currentFolderPath.IndexOf("bin"));
-
-                return projectFolderPath;
             }
         }
     }
