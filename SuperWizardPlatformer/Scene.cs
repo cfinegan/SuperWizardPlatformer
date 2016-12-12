@@ -13,8 +13,6 @@ namespace SuperWizardPlatformer
         private SpriteBatch spriteBatch;
         private Color bgColor = Color.Black;
 
-        public bool IsReadyToQuit { get; private set; } = false;
-
         public Scene(Game game, string mapName)
         {
             content = new ContentManager(game.Services, game.Content.RootDirectory);
@@ -30,6 +28,32 @@ namespace SuperWizardPlatformer
             {
                 bgColor = (Color)tmxData.BackgroundColor;
             }
+
+            foreach (var objGroup in tmxData.ObjectGroups)
+            {
+                foreach (var obj in objGroup.Objects)
+                {
+                    Console.WriteLine(obj.Name);
+                }
+            }
+        }
+
+        public bool IsReadyToQuit { get; private set; } = false;
+        public bool IsDisposed { get; private set; } = false;
+
+        public void Dispose()
+        {
+            if (!IsDisposed)
+            {
+                content.Dispose();
+
+                IsDisposed = true;
+            }
+        }
+
+        public void Update(GameTime gameTime)
+        {
+            // Do nothing for now.
         }
 
         public void Draw(GraphicsDevice graphicsDevice, GameTime gameTime)
@@ -40,46 +64,5 @@ namespace SuperWizardPlatformer
             tmxData.Draw(spriteBatch, new Rectangle(0, 0, tmxData.WidthInPixels, tmxData.HeightInPixels));
             spriteBatch.End();
         }
-
-        #region IDisposable Support
-        private bool disposedValue = false; // To detect redundant calls
-
-        protected virtual void Dispose(bool disposing)
-        {
-            if (!disposedValue)
-            {
-                if (disposing)
-                {
-                    // TODO: dispose managed state (managed objects).
-                    content.Dispose();
-                }
-
-                // TODO: free unmanaged resources (unmanaged objects) and override a finalizer below.
-                // TODO: set large fields to null.
-
-                disposedValue = true;
-            }
-        }
-
-        // TODO: override a finalizer only if Dispose(bool disposing) above has code to free unmanaged resources.
-        // ~Scene() {
-        //   // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
-        //   Dispose(false);
-        // }
-
-        // This code added to correctly implement the disposable pattern.
-        public void Dispose()
-        {
-            // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
-            Dispose(true);
-            // TODO: uncomment the following line if the finalizer is overridden above.
-            // GC.SuppressFinalize(this);
-        }
-
-        public void Update(GameTime gameTime)
-        {
-            throw new NotImplementedException();
-        }
-        #endregion
     }
 }
