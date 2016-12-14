@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using MonoGame.Extended.ViewportAdapters;
 using System;
 
 namespace SuperWizardPlatformer
@@ -13,6 +14,7 @@ namespace SuperWizardPlatformer
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
         IScene scene;
+        ViewportAdapter viewportAdapter;
 
         public Game1()
         {
@@ -39,6 +41,9 @@ namespace SuperWizardPlatformer
             Console.WriteLine("BackbufferHeight: {0}", graphics.PreferredBackBufferHeight);
             Console.WriteLine("IsFixedTimeStep: {0}", IsFixedTimeStep);
 
+            viewportAdapter = new BoxingViewportAdapter(Window, graphics, 640, 480);
+            Window.AllowUserResizing = true;
+
             base.Initialize();
         }
 
@@ -52,7 +57,7 @@ namespace SuperWizardPlatformer
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
             // TODO: use this.Content to load your game content here
-            scene = new Scene(this, "mario_test");
+            scene = new GameplayScene(this, "mario_test");
         }
 
         /// <summary>
@@ -62,7 +67,8 @@ namespace SuperWizardPlatformer
         protected override void UnloadContent()
         {
             // TODO: Unload any non ContentManager content here
-            if (scene != null) { scene.Dispose(); }
+            scene.Dispose();
+            spriteBatch.Dispose();
         }
 
         /// <summary>
@@ -76,6 +82,7 @@ namespace SuperWizardPlatformer
                 Exit();
 
             // TODO: Add your update logic here
+            scene.Update(gameTime);
 
             base.Update(gameTime);
         }
