@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Content;
 using MonoGame.Extended.Maps.Tiled;
+using FarseerPhysics.Dynamics;
 
 namespace SuperWizardPlatformer
 {
@@ -17,44 +15,52 @@ namespace SuperWizardPlatformer
         private ContentManager content;
         private TiledMap map;
         private SpriteBatch spriteBatch;
+        private World physicsWorld;
+        private GameObjectFactory factory;
         private Color bgColor;
 
-        private List<IEntity> entities = new List<IEntity>();
-        private List<IDrawable> drawables = new List<IDrawable>();
+        private List<IEntity> entities;
+        private List<IDrawable> drawables;
 
         public GameplayScene(Game game, string mapName)
         {
             content = new ContentManager(game.Services, game.Content.RootDirectory);
             map = content.Load<TiledMap>(mapName);
             spriteBatch = new SpriteBatch(game.GraphicsDevice);
+            physicsWorld = new World(new Vector2(0, 9.8f));
 
             bgColor = map.BackgroundColor != null ? (Color)map.BackgroundColor : defaultBgColor;
 
-            foreach (var objGroup in map.ObjectGroups)
-            {
-                foreach (var obj in objGroup.Objects)
-                {
-                    if (obj.Gid == null)
-                    {
-                        throw new ArgumentNullException(
-                            string.Format("obj.Gid for object '{0}'", obj.Name));
-                    }
-                    else
-                    {
-                        var fixPos = new Vector2(obj.X, obj.Y);
-                        var fixSize = new Vector2(obj.Width, obj.Height);
-                        DrawableFixture fixture = new DrawableFixture(fixPos, fixSize, obj.IsVisible);
+            factory = new GameObjectFactory(spriteBatch);
+            var results = factory.CreateScene(map, physicsWorld);
+            entities = results.Item1;
+            drawables = results.Item2;
 
-                        DrawableTexture drawable = new DrawableTexture(
-                            fixture, map.GetTileRegion((int)obj.Gid), spriteBatch);
+            //foreach (var objGroup in map.ObjectGroups)
+            //{
+            //    foreach (var obj in objGroup.Objects)
+            //    {
+            //        if (obj.Gid == null)
+            //        {
+            //            throw new ArgumentNullException(
+            //                string.Format("obj.Gid for object '{0}'", obj.Name));
+            //        }
+            //        else
+            //        {
+            //            var fixPos = new Vector2(obj.X, obj.Y);
+            //            var fixSize = new Vector2(obj.Width, obj.Height);
+            //            DrawableFixture fixture = new DrawableFixture(fixPos, fixSize, obj.IsVisible);
 
-                        fixture.Drawable = drawable;
+            //            DrawableTexture drawable = new DrawableTexture(
+            //                fixture, map.GetTileRegion((int)obj.Gid), spriteBatch);
 
-                        entities.Add(fixture);
-                        drawables.Add(drawable);
-                    }
-                }
-            }
+            //            fixture.Drawable = drawable;
+
+            //            entities.Add(fixture);
+            //            drawables.Add(drawable);
+            //        }
+            //    }
+            //}
         }
 
         public bool IsReadyToQuit { get; private set; } = false;
@@ -82,6 +88,7 @@ namespace SuperWizardPlatformer
 
             foreach (var drawable in drawables)
             {
+                Console.WriteLine("about to draw!");
                 drawable.Draw();
             }
 
@@ -94,6 +101,8 @@ namespace SuperWizardPlatformer
             {
                 entity.Update(gameTime);
             }
+
+            physicsWorld.Step(1.0f / 60.0f);
         }
     }
 }

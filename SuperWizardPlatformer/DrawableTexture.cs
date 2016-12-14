@@ -1,11 +1,8 @@
-﻿using Microsoft.Xna.Framework;
+﻿using FarseerPhysics;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.TextureAtlases;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SuperWizardPlatformer
 {
@@ -17,9 +14,9 @@ namespace SuperWizardPlatformer
 
         public DrawableTexture(IEntity parent, TextureRegion2D textureRegion, SpriteBatch spriteBatch)
         {
-            if (parent == null) { throw new ArgumentNullException("parent"); }
-            if (textureRegion == null) { throw new ArgumentNullException("textureRegion"); }
-            if (spriteBatch == null) { throw new ArgumentNullException("spriteBatch"); }
+            if (parent == null) { throw new ArgumentNullException(nameof(parent)); }
+            if (textureRegion == null) { throw new ArgumentNullException(nameof(textureRegion)); }
+            if (spriteBatch == null) { throw new ArgumentNullException(nameof(spriteBatch)); }
 
             this.parent = parent;
             this.textureRegion = textureRegion;
@@ -28,13 +25,17 @@ namespace SuperWizardPlatformer
 
         public void Draw()
         {
+            Console.WriteLine(parent.IsVisible);
             if (parent.IsVisible)
             {
+                Console.WriteLine(parent.Size);
                 Rectangle destRect = new Rectangle(
-                    (int)parent.Position.X,
-                    (int)parent.Position.Y,
-                    (int)parent.Size.X,
-                    (int)parent.Size.Y);
+                    (int)ConvertUnits.ToDisplayUnits(parent.Position.X),
+                    (int)ConvertUnits.ToDisplayUnits(parent.Position.Y),
+                    (int)ConvertUnits.ToDisplayUnits(parent.Size.X),
+                    (int)ConvertUnits.ToDisplayUnits(parent.Size.Y));
+
+                Console.WriteLine(destRect);
 
                 spriteBatch.Draw(textureRegion.Texture, null, destRect, textureRegion.Bounds);
             }

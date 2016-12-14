@@ -55,16 +55,23 @@
   <ItemGroup>
     <Compile Include="DrawableTexture.cs" />
     <Compile Include="DrawableFixture.cs" />
+    <Compile Include="DynamicBody.cs" />
     <Compile Include="Game1.cs" />
+    <Compile Include="GameObjectFactory.cs" />
     <Compile Include="GameplayScene.cs" />
     <Compile Include="IDrawable.cs" />
     <Compile Include="IEntity.cs" />
     <Compile Include="IScene.cs" />
     <Compile Include="MapInfo.cs" />
+    <Compile Include="Player.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Reference Include="FarseerPhysics MonoGame, Version=3.5.0.40766, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\FarseerPhysics.MonoGame.Unofficial.3.5.0\lib\FarseerPhysics MonoGame.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="MonoGame.Extended, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\MonoGame.Extended.0.5.149\lib\MonoGame.Extended.dll</HintPath>
       <Private>True</Private>
