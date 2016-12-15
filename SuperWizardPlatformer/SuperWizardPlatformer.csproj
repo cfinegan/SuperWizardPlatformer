@@ -54,7 +54,6 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="TextureDrawable.cs" />
-    <Compile Include="DrawableFixture.cs" />
     <Compile Include="DynamicBody.cs" />
     <Compile Include="Game1.cs" />
     <Compile Include="GameObjectFactory.cs" />

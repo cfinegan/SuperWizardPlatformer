@@ -1,5 +1,6 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Input;
 
 namespace SuperWizardPlatformer
 {
@@ -24,7 +25,30 @@ namespace SuperWizardPlatformer
 
         public void Update(GameTime gameTime)
         {
-            throw new NotImplementedException();
+            int xVel = 0, yVel = 0;
+            int velFactor = 3;
+
+            if (Keyboard.GetState().IsKeyDown(Keys.Left))
+            {
+                xVel -= velFactor;
+            }
+
+            if (Keyboard.GetState().IsKeyDown(Keys.Right))
+            {
+                xVel += velFactor;
+            }
+
+            if (Keyboard.GetState().IsKeyDown(Keys.Up))
+            {
+                yVel -= velFactor;
+            }
+
+            if (Keyboard.GetState().IsKeyDown(Keys.Down))
+            {
+                yVel += velFactor;
+            }
+
+            Position = new Vector2(Position.X + xVel, Position.Y + yVel);
         }
     }
 }
