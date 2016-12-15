@@ -25,19 +25,16 @@ namespace SuperWizardPlatformer
 
         public void Draw()
         {
-            Console.WriteLine(parent.IsVisible);
             if (parent.IsVisible)
             {
-                Console.WriteLine("Parent size: {0}", parent.Size);
-                Rectangle destRect = new Rectangle(
-                    (int)ConvertUnits.ToDisplayUnits(parent.Position.X),
-                    (int)ConvertUnits.ToDisplayUnits(parent.Position.Y),
-                    (int)ConvertUnits.ToDisplayUnits(parent.Size.X),
-                    (int)ConvertUnits.ToDisplayUnits(parent.Size.Y));
 
-                Console.WriteLine("destRect: {0}", destRect);
+                var bodyCenter = ConvertUnits.ToDisplayUnits(parent.Position);
 
-                spriteBatch.Draw(textureRegion.Texture, null, destRect, textureRegion.Bounds);
+                var texturePos = new Vector2(
+                    bodyCenter.X - ConvertUnits.ToDisplayUnits(parent.Size.X) / 2.0f, 
+                    bodyCenter.Y - ConvertUnits.ToDisplayUnits(parent.Size.Y) / 2.0f);
+
+                spriteBatch.Draw(textureRegion.Texture, texturePos, null, textureRegion.Bounds);
             }
         }
     }

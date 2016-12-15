@@ -19,11 +19,14 @@ namespace SuperWizardPlatformer
         public GameObjectFactory(SpriteBatch spriteBatch)
         {
             this.spriteBatch = spriteBatch;
+
+            Console.WriteLine("Conversion test: {0}", ConvertUnits.ToDisplayUnits(ConvertUnits.ToSimUnits(432)));
         }
 
         public Tuple<List<IEntity>, List<IDrawable>> CreateScene(TiledMap map, World physicsWorld)
         {
             const float DENSITY_DEFAULT = 1.0f;
+            const string PHYSICS_DEFAULT = "static";
 
             var entities = new List<IEntity>();
             var drawables = new List<IDrawable>();
@@ -38,21 +41,45 @@ namespace SuperWizardPlatformer
                     obj.Properties.TryGetValue("density", out strDensity);
                     float.TryParse(strDensity, out density);
 
+                    // Get physics from properties (or default).
+                    string physics;
+                    if (!obj.Properties.TryGetValue("physics", out physics))
+                    {
+                        physics = PHYSICS_DEFAULT;
+                    }
+
+
                     switch (obj.ObjectType)
                     {
                         case TiledObjectType.Tile:
                             if (obj.Gid == null) { throw new ArgumentNullException("obj.Gid"); }
 
-                            Console.WriteLine("Pre-mult body size: {0}, {1}", obj.Width, obj.Height);
+                            // Note that for TiledObjects of type Tile, obj.X is the BOTTOM of the rectangle.
+                            var bodyCenter = ConvertUnits.ToSimUnits(new Vector2(
+                                obj.X + obj.Width / 2.0f, 
+                                obj.Y - obj.Height / 2.0f));
+
                             float bodyWidth = ConvertUnits.ToSimUnits(obj.Width);
                             float bodyHeight = ConvertUnits.ToSimUnits(obj.Height);
-                            Console.WriteLine("Body Size: {0}, {1}", bodyWidth, bodyHeight);
                             var body = BodyFactory.CreateRectangle(physicsWorld, bodyWidth, bodyHeight, density);
 
-                            body.FixtureList.ElementAt(0);
+                            switch (physics)
+                            {
+                                case "dynamic":
+                                    body.BodyType = BodyType.Dynamic;
+                                    break;
+                                case "kinematic":
+                                    body.BodyType = BodyType.Kinematic;
+                                    break;
+                                case "static":
+                                default:
+                                    body.BodyType = BodyType.Static;
+                                    break;
+                            }
+
+
                             body.FixedRotation = true;
-                            body.BodyType = BodyType.Dynamic;
-                            body.Position = new Vector2(ConvertUnits.ToSimUnits(obj.X), ConvertUnits.ToSimUnits(obj.Y));
+                            body.Position = bodyCenter;
 
                             var entity = new DynamicBody(body, new Vector2(bodyWidth, bodyHeight));
                             var drawable = new TextureDrawable(entity, map.GetTileRegion((int)obj.Gid), spriteBatch);
@@ -62,7 +89,6 @@ namespace SuperWizardPlatformer
 
                             entities.Add(entity);
                             drawables.Add(drawable);
-                            Console.WriteLine("Final pos: {0}", body.Position);
                             break;
 
                         case TiledObjectType.Rectangle:
@@ -70,11 +96,14 @@ namespace SuperWizardPlatformer
                             float rectHeight = ConvertUnits.ToSimUnits(obj.Height);
                             body = BodyFactory.CreateRectangle(physicsWorld, rectWidth, rectHeight, density);
 
-                            body.BodyType = BodyType.Static;
+                            // Note that for Rectangle TiledObjects, obj.Y is the TOP of the rectangle.
+                            bodyCenter = ConvertUnits.ToSimUnits(new Vector2(
+                                obj.X + obj.Width / 2.0f,
+                                obj.Y + obj.Height / 2.0f));
 
-                            float rectX = ConvertUnits.ToSimUnits(obj.X);
-                            float rectY = ConvertUnits.ToSimUnits(obj.Y);
-                            body.Position = new Vector2(rectX, rectY);
+                            body.Position = bodyCenter;
+
+                            body.BodyType = BodyType.Static;
                             break;
 
                         default:

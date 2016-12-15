@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="40" height="30" tilewidth="16" tileheight="16" backgroundcolor="#5c94fc" nextobjectid="70">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="40" height="30" tilewidth="16" tileheight="16" backgroundcolor="#5c94fc" nextobjectid="79">
  <tileset firstgid="1" name="MarioTiles" tilewidth="16" tileheight="16" spacing="1" tilecount="132" columns="22">
   <image source="mario_tiles.png" width="374" height="102"/>
  </tileset>
@@ -30,7 +30,7 @@
 0,0,0,0,0,0,0,0,0,0,0,0,55,56,57,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,8,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,3,0,7,8,7,8,7,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,16,17,0,
@@ -41,7 +41,17 @@
 </data>
  </layer>
  <objectgroup name="Object Layer 1">
-  <object id="2" name="CloudGuy" gid="79" x="64" y="384" width="16" height="16"/>
+  <object id="2" name="CloudGuy" gid="79" x="96" y="256" width="16" height="16">
+   <properties>
+    <property name="physics" value="dynamic"/>
+   </properties>
+  </object>
   <object id="69" x="0" y="448" width="160" height="32"/>
+  <object id="70" gid="8" x="96" y="368" width="16" height="16">
+   <properties>
+    <property name="physics" value="static"/>
+   </properties>
+  </object>
+  <object id="77" x="64" y="400" width="80" height="16"/>
  </objectgroup>
 </map>

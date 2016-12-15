@@ -56,6 +56,16 @@ namespace SuperWizardPlatformer
             }
         }
 
+        public void Update(GameTime gameTime)
+        {
+            foreach (var entity in entities)
+            {
+                entity.Update(gameTime);
+            }
+
+            physicsWorld.Step(1.0f / 60.0f);
+        }
+
         public void Draw(GraphicsDevice graphicsDevice, GameTime gameTime)
         {
             graphicsDevice.Clear(bgColor);
@@ -70,16 +80,6 @@ namespace SuperWizardPlatformer
             }
 
             spriteBatch.End();
-        }
-
-        public void Update(GameTime gameTime)
-        {
-            foreach (var entity in entities)
-            {
-                entity.Update(gameTime);
-            }
-
-            physicsWorld.Step(1.0f / 60.0f);
         }
     }
 }
