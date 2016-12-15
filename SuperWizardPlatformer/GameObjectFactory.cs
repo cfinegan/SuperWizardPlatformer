@@ -15,15 +15,15 @@ namespace SuperWizardPlatformer
     class GameObjectFactory
     {
         private SpriteBatch spriteBatch;
+        private World physicsWorld;
 
-        public GameObjectFactory(SpriteBatch spriteBatch)
+        public GameObjectFactory(World physicsWorld, SpriteBatch spriteBatch)
         {
+            this.physicsWorld = physicsWorld;
             this.spriteBatch = spriteBatch;
-
-            Console.WriteLine("Conversion test: {0}", ConvertUnits.ToDisplayUnits(ConvertUnits.ToSimUnits(432)));
         }
 
-        public Tuple<List<IEntity>, List<IDrawable>> CreateScene(TiledMap map, World physicsWorld)
+        public Tuple<List<IEntity>, List<IDrawable>> CreateScene(TiledMap map)
         {
             const float DENSITY_DEFAULT = 1.0f;
             const string PHYSICS_DEFAULT = "static";
@@ -48,13 +48,12 @@ namespace SuperWizardPlatformer
                         physics = PHYSICS_DEFAULT;
                     }
 
-
                     switch (obj.ObjectType)
                     {
                         case TiledObjectType.Tile:
                             if (obj.Gid == null) { throw new ArgumentNullException("obj.Gid"); }
 
-                            // Note that for TiledObjects of type Tile, obj.X is the BOTTOM of the rectangle.
+                            // Note that for TiledObjects of type Tile, obj.Y is the BOTTOM of the rectangle.
                             var bodyCenter = ConvertUnits.ToSimUnits(new Vector2(
                                 obj.X + obj.Width / 2.0f, 
                                 obj.Y - obj.Height / 2.0f));
@@ -107,6 +106,9 @@ namespace SuperWizardPlatformer
                             break;
 
                         default:
+                            Console.WriteLine(
+                                "[GameObjectFactory] Warning! Discarding unsupported {0} of type {1}", 
+                                nameof(obj.ObjectType), obj.ObjectType);
                             break;
                     }
                 }

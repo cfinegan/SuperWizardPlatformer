@@ -24,7 +24,7 @@ namespace SuperWizardPlatformer
 
         public GameplayScene(Game game, string mapName)
         {
-            float GRAVITY = 9.8f;
+            const float GRAVITY = 9.8f;
 
             content = new ContentManager(game.Services, game.Content.RootDirectory);
             map = content.Load<TiledMap>(mapName);
@@ -33,8 +33,8 @@ namespace SuperWizardPlatformer
 
             bgColor = map.BackgroundColor != null ? (Color)map.BackgroundColor : defaultBgColor;
 
-            factory = new GameObjectFactory(spriteBatch);
-            var results = factory.CreateScene(map, physicsWorld);
+            factory = new GameObjectFactory(physicsWorld, spriteBatch);
+            var results = factory.CreateScene(map);
             entities = results.Item1;
             drawables = results.Item2;
         }
@@ -42,8 +42,6 @@ namespace SuperWizardPlatformer
         public bool IsReadyToQuit { get; private set; } = false;
 
         public bool IsDisposed { get; private set; } = false;
-
-        public bool IsDebugViewEnabled { get; set; } = true;
 
         public void Dispose()
         {
