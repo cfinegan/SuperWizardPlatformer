@@ -36,6 +36,8 @@ namespace SuperWizardPlatformer
                 {
                     game.Run();
                 }
+
+                logFile.Flush();
             }
         }
     }

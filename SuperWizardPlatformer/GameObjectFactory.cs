@@ -49,15 +49,20 @@ namespace SuperWizardPlatformer
                             Console.WriteLine("Body Size: {0}, {1}", bodyWidth, bodyHeight);
                             var body = BodyFactory.CreateRectangle(physicsWorld, bodyWidth, bodyHeight, density);
 
+                            body.FixtureList.ElementAt(0);
+                            body.FixedRotation = true;
                             body.BodyType = BodyType.Dynamic;
                             body.Position = new Vector2(ConvertUnits.ToSimUnits(obj.X), ConvertUnits.ToSimUnits(obj.Y));
 
                             var entity = new DynamicBody(body, new Vector2(bodyWidth, bodyHeight));
-                            var drawable = new DrawableTexture(entity, map.GetTileRegion((int)obj.Gid), spriteBatch);
+                            var drawable = new TextureDrawable(entity, map.GetTileRegion((int)obj.Gid), spriteBatch);
 
+                            body.UserData = entity;
                             entity.Drawable = drawable;
+
                             entities.Add(entity);
                             drawables.Add(drawable);
+                            Console.WriteLine("Final pos: {0}", body.Position);
                             break;
 
                         case TiledObjectType.Rectangle:

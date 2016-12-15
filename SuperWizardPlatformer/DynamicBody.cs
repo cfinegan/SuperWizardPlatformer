@@ -42,8 +42,7 @@ namespace SuperWizardPlatformer
 
         public void Update(GameTime gameTime)
         {
-            // Do nothing for now.
-            return;
+            return; // Do nothing for now.
         }
     }
 }

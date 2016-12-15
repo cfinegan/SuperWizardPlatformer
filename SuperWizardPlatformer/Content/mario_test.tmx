@@ -41,7 +41,7 @@
 </data>
  </layer>
  <objectgroup name="Object Layer 1">
-  <object id="2" name="CloudGuy" gid="79" x="32" y="382.667" width="16" height="16"/>
+  <object id="2" name="CloudGuy" gid="79" x="64" y="384" width="16" height="16"/>
   <object id="69" x="0" y="448" width="160" height="32"/>
  </objectgroup>
 </map>

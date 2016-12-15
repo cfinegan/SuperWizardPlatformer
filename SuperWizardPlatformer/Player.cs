@@ -7,8 +7,8 @@ namespace SuperWizardPlatformer
     {
         public Player(Vector2 position, Vector2 size, bool isVisible = true)
         {
-            if (position == null) { throw new ArgumentNullException("position"); }
-            if (size == null) { throw new ArgumentNullException("size"); }
+            if (position == null) { throw new ArgumentNullException(nameof(position)); }
+            if (size == null) { throw new ArgumentNullException(nameof(size)); }
 
             Position = position;
             Size = size;
