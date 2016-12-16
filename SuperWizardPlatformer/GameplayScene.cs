@@ -10,34 +10,35 @@ namespace SuperWizardPlatformer
 {
     class GameplayScene : IScene
     {
-        private static Color defaultBgColor = Color.Black;
+        private static readonly Color defaultBgColor = Color.Black;
+        private const int CAPACITY_DEFAULT = 32;
+        private const float GRAVITY_Y_DEFAULT = 9.8f;
 
         private ContentManager content;
         private TiledMap map;
         private SpriteBatch spriteBatch;
-        private World physicsWorld;
         private GameObjectFactory factory;
         private Color bgColor;
 
-        private List<IEntity> entities;
-        private List<IDrawable> drawables;
-
         public GameplayScene(Game game, string mapName)
         {
-            const float GRAVITY = 9.8f;
-
             content = new ContentManager(game.Services, game.Content.RootDirectory);
             map = content.Load<TiledMap>(mapName);
             spriteBatch = new SpriteBatch(game.GraphicsDevice);
-            physicsWorld = new World(new Vector2(0, GRAVITY));
 
             bgColor = map.BackgroundColor != null ? (Color)map.BackgroundColor : defaultBgColor;
 
-            factory = new GameObjectFactory(physicsWorld, spriteBatch);
+            factory = new GameObjectFactory(PhysicsWorld, spriteBatch);
             var results = factory.CreateScene(map);
-            entities = results.Item1;
-            drawables = results.Item2;
+            Entities = results.Item1;
+            Drawables = results.Item2;
         }
+
+        public List<IEntity> Entities { get; private set; } = new List<IEntity>(CAPACITY_DEFAULT);
+
+        public List<IDrawable> Drawables { get; private set; } = new List<IDrawable>(CAPACITY_DEFAULT);
+
+        public World PhysicsWorld { get; private set; } = new World(new Vector2(0, GRAVITY_Y_DEFAULT));
 
         public bool IsReadyToQuit { get; private set; } = false;
 
@@ -47,6 +48,8 @@ namespace SuperWizardPlatformer
         {
             if (!IsDisposed)
             {
+                PhysicsWorld.ClearForces();
+                PhysicsWorld.Clear();
                 content.Dispose();
                 spriteBatch.Dispose();
 
@@ -56,12 +59,12 @@ namespace SuperWizardPlatformer
 
         public void Update(GameTime gameTime)
         {
-            foreach (var entity in entities)
+            foreach (var entity in Entities)
             {
                 entity.Update(gameTime);
             }
 
-            physicsWorld.Step(1.0f / 60.0f);
+            PhysicsWorld.Step(1.0f / 60.0f);
         }
 
         public void Draw(GraphicsDevice graphicsDevice, GameTime gameTime)
@@ -72,7 +75,7 @@ namespace SuperWizardPlatformer
 
             map.Draw(spriteBatch, new Rectangle(0, 0, 640, 480));
 
-            foreach (var drawable in drawables)
+            foreach (var drawable in Drawables)
             {
                 drawable.Draw();
             }

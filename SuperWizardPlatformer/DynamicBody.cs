@@ -26,7 +26,7 @@ namespace SuperWizardPlatformer
 
         public bool IsVisible { get; set; }
 
-        public Vector2 Size { get; set; }
+        public Vector2 Size { get; private set; }
 
         public Vector2 Position
         {

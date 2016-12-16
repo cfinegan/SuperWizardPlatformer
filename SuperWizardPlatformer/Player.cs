@@ -19,7 +19,7 @@ namespace SuperWizardPlatformer
 
         public Vector2 Position { get; set; }
 
-        public Vector2 Size { get; set; }
+        public Vector2 Size { get; private set; }
 
         public IDrawable drawable { get; set; }
 
@@ -49,6 +49,11 @@ namespace SuperWizardPlatformer
             }
 
             Position = new Vector2(Position.X + xVel, Position.Y + yVel);
+        }
+
+        public void RemoveFrom(IScene scene)
+        {
+
         }
     }
 }
