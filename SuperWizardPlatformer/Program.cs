@@ -16,12 +16,25 @@ namespace SuperWizardPlatformer
         [STAThread]
         static void Main()
         {
-            using (var logFile = new StreamWriter("SuperWizardPlatformer.log"))
+            StreamWriter logFile = null;
+
+            try
             {
+                logFile = new StreamWriter("SuperWizardPlatformer.log");
+
                 // Re-route all console output to log.
                 Console.SetOut(logFile);
                 Console.SetError(logFile);
+            }
+            catch (Exception e)
+            {
+                Console.OpenStandardOutput();
+                Console.OpenStandardError();
+                Console.Error.WriteLine(e);
+            }
 
+            try
+            {
                 // Change process-wide settings.
                 GCSettings.LatencyMode = GCLatencyMode.SustainedLowLatency;
 
@@ -36,8 +49,17 @@ namespace SuperWizardPlatformer
                 {
                     game.Run();
                 }
-
-                logFile.Flush();
+            }
+            catch (Exception e)
+            {
+                Console.Error.WriteLine(e);
+            }
+            finally
+            {
+                if (logFile != null)
+                {
+                    logFile.Close();
+                }
             }
         }
     }
