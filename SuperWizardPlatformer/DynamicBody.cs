@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using FarseerPhysics.Dynamics;
 
@@ -10,19 +6,21 @@ namespace SuperWizardPlatformer
 {
     class DynamicBody : IEntity
     {
-        Body body;
-
         public DynamicBody(Body body, Vector2 size, bool isVisible = true)
         {
             if (body == null) { throw new ArgumentNullException(nameof(body)); }
             if (size == null) { throw new ArgumentNullException(nameof(size)); }
 
             IsVisible = isVisible;
-            this.body = body;
+            Body = body;
             Size = size;
         }
 
+        public Body Body { get; private set; }
+
         public IDrawable Drawable { get; set; }
+
+        public bool IsMarkedForRemoval { get; set; } = false;
 
         public bool IsVisible { get; set; }
 
@@ -32,17 +30,17 @@ namespace SuperWizardPlatformer
         {
             get
             {
-                return body.Position;
+                return Body.Position;
             }
             set
             {
-                body.Position = value;
+                Body.Position = value;
             }
         }
 
-        public void Update(GameTime gameTime)
+        public void Update(IScene scene, GameTime gameTime)
         {
-            return; // Do nothing for now.
+            // Do nothing for now.
         }
     }
 }

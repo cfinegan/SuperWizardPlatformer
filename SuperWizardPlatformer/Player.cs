@@ -1,6 +1,7 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
+using FarseerPhysics.Dynamics;
 
 namespace SuperWizardPlatformer
 {
@@ -15,15 +16,19 @@ namespace SuperWizardPlatformer
             Size = size;
         }
 
+        public Body Body { get; private set; }
+
         public bool IsVisible { get; set; }
 
         public Vector2 Position { get; set; }
 
         public Vector2 Size { get; private set; }
 
-        public IDrawable drawable { get; set; }
+        public IDrawable Drawable { get; set; }
 
-        public void Update(GameTime gameTime)
+        public bool IsMarkedForRemoval { get; set; }
+
+        public void Update(IScene scene, GameTime gameTime)
         {
             int xVel = 0, yVel = 0;
             int velFactor = 3;
@@ -49,11 +54,6 @@ namespace SuperWizardPlatformer
             }
 
             Position = new Vector2(Position.X + xVel, Position.Y + yVel);
-        }
-
-        public void RemoveFrom(IScene scene)
-        {
-
         }
     }
 }

@@ -12,24 +12,31 @@ using System.Threading.Tasks;
 
 namespace SuperWizardPlatformer
 {
+    /// <summary>
+    /// Used to insert new game objects into an existing scene, for the purposes of both constructing
+    /// the scene and adding new objects to it during gameplay. The eventual goal of this class is
+    /// for all garbage to be generated during construction and the PopulateScene method, so that
+    /// individual calls to methods that insert new objects do not trigger GC collections.
+    /// </summary>
     class GameObjectFactory
     {
+        private List<IEntity> entities;
+        private List<IDrawable> drawables;
         private SpriteBatch spriteBatch;
         private World physicsWorld;
 
-        public GameObjectFactory(World physicsWorld, SpriteBatch spriteBatch)
+        public GameObjectFactory(IScene scene, SpriteBatch spriteBatch)
         {
-            this.physicsWorld = physicsWorld;
+            entities = scene.Entities;
+            drawables = scene.Drawables;
+            physicsWorld = scene.PhysicsWorld;
             this.spriteBatch = spriteBatch;
         }
 
-        public Tuple<List<IEntity>, List<IDrawable>> CreateScene(TiledMap map)
+        public void PopulateScene(TiledMap map)
         {
             const float DENSITY_DEFAULT = 1.0f;
             const string PHYSICS_DEFAULT = "static";
-
-            var entities = new List<IEntity>();
-            var drawables = new List<IDrawable>();
 
             foreach (var objGroup in map.ObjectGroups)
             {
@@ -51,7 +58,11 @@ namespace SuperWizardPlatformer
                     switch (obj.ObjectType)
                     {
                         case TiledObjectType.Tile:
-                            if (obj.Gid == null) { throw new ArgumentNullException("obj.Gid"); }
+                            if (obj.Gid == null)
+                            {
+                                var errMsg = string.Format("obj.Gid (ID: {0}, Name: {1})", obj.Id, obj.Name);
+                                throw new ArgumentNullException(errMsg);
+                            }
 
                             // Note that for TiledObjects of type Tile, obj.Y is the BOTTOM of the rectangle.
                             var bodyCenter = ConvertUnits.ToSimUnits(new Vector2(
@@ -60,7 +71,7 @@ namespace SuperWizardPlatformer
 
                             float bodyWidth = ConvertUnits.ToSimUnits(obj.Width);
                             float bodyHeight = ConvertUnits.ToSimUnits(obj.Height);
-                            var body = BodyFactory.CreateRectangle(physicsWorld, bodyWidth, bodyHeight, density);
+                            var body = BodyFactory.CreateRectangle(physicsWorld, bodyWidth, bodyHeight, density, bodyCenter);
 
                             switch (physics)
                             {
@@ -71,14 +82,16 @@ namespace SuperWizardPlatformer
                                     body.BodyType = BodyType.Kinematic;
                                     break;
                                 case "static":
-                                default:
                                     body.BodyType = BodyType.Static;
+                                    break;
+                                default:
+                                    // This should only happen if the physics value read from the TMX data is invalid.
+                                    body.BodyType = BodyType.Static;
+                                    Console.WriteLine("Unrecognized physics value of '{0}' - Defaulting to {1}", physics, body.BodyType);
                                     break;
                             }
 
-
                             body.FixedRotation = true;
-                            body.Position = bodyCenter;
 
                             var entity = new DynamicBody(body, new Vector2(bodyWidth, bodyHeight));
                             var drawable = new TextureDrawable(entity, map.GetTileRegion((int)obj.Gid), spriteBatch);
@@ -106,15 +119,13 @@ namespace SuperWizardPlatformer
                             break;
 
                         default:
-                            Console.WriteLine(
-                                "[GameObjectFactory] Warning! Discarding unsupported {0} of type {1}", 
-                                nameof(obj.ObjectType), obj.ObjectType);
+                            Console.Write("[GameObjectFactory] Warning! ");
+                            Console.WriteLine("Discarding unsupported object of type {1}",  
+                                obj.ObjectType);
                             break;
                     }
                 }
             }
-
-            return Tuple.Create(entities, drawables);
         }
     }
 }
