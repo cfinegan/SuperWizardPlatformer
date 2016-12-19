@@ -10,20 +10,17 @@ namespace SuperWizardPlatformer
     {
         private IEntity parent;
         private TextureRegion2D textureRegion;
-        private SpriteBatch spriteBatch;
 
-        public TextureDrawable(IEntity parent, TextureRegion2D textureRegion, SpriteBatch spriteBatch)
+        public TextureDrawable(IEntity parent, TextureRegion2D textureRegion)
         {
             if (parent == null) { throw new ArgumentNullException(nameof(parent)); }
             if (textureRegion == null) { throw new ArgumentNullException(nameof(textureRegion)); }
-            if (spriteBatch == null) { throw new ArgumentNullException(nameof(spriteBatch)); }
 
             this.parent = parent;
             this.textureRegion = textureRegion;
-            this.spriteBatch = spriteBatch;
         }
 
-        public void Draw()
+        public void Draw(SpriteBatch spriteBatch)
         {
             if (parent.IsVisible)
             {

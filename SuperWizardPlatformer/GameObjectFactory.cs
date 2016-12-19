@@ -1,14 +1,11 @@
-﻿using FarseerPhysics;
+﻿using System;
+using System.Collections.Generic;
+using FarseerPhysics;
 using FarseerPhysics.Dynamics;
 using FarseerPhysics.Factories;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.Maps.Tiled;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SuperWizardPlatformer
 {
@@ -22,7 +19,6 @@ namespace SuperWizardPlatformer
     {
         private List<IEntity> entities;
         private List<IDrawable> drawables;
-        private SpriteBatch spriteBatch;
         private World physicsWorld;
 
         public GameObjectFactory(IScene scene, SpriteBatch spriteBatch)
@@ -30,7 +26,6 @@ namespace SuperWizardPlatformer
             entities = scene.Entities;
             drawables = scene.Drawables;
             physicsWorld = scene.PhysicsWorld;
-            this.spriteBatch = spriteBatch;
         }
 
         public void PopulateScene(TiledMap map)
@@ -94,7 +89,7 @@ namespace SuperWizardPlatformer
                             body.FixedRotation = true;
 
                             var entity = new DynamicBody(body, new Vector2(bodyWidth, bodyHeight));
-                            var drawable = new TextureDrawable(entity, map.GetTileRegion((int)obj.Gid), spriteBatch);
+                            var drawable = new TextureDrawable(entity, map.GetTileRegion((int)obj.Gid));
 
                             body.UserData = entity;
                             entity.Drawable = drawable;

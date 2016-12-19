@@ -1,7 +1,9 @@
-﻿namespace SuperWizardPlatformer
+﻿using Microsoft.Xna.Framework.Graphics;
+
+namespace SuperWizardPlatformer
 {
     interface IDrawable
     {
-        void Draw();
+        void Draw(SpriteBatch spriteBatch);
     }
 }

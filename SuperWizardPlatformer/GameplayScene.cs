@@ -123,7 +123,7 @@ namespace SuperWizardPlatformer
 
             foreach (var drawable in Drawables)
             {
-                drawable.Draw();
+                drawable.Draw(spriteBatch);
             }
 
             spriteBatch.End();
