@@ -82,6 +82,7 @@ namespace SuperWizardPlatformer
                                 default:
                                     // This should only happen if the physics value read from the TMX data is invalid.
                                     body.BodyType = BodyType.Static;
+                                    Console.Write("[{0}] Warning! ", GetType().Name);
                                     Console.WriteLine("Unrecognized physics value of '{0}' - Defaulting to {1}", physics, body.BodyType);
                                     break;
                             }
@@ -114,8 +115,8 @@ namespace SuperWizardPlatformer
                             break;
 
                         default:
-                            Console.Write("[GameObjectFactory] Warning! ");
-                            Console.WriteLine("Discarding unsupported object of type {1}",  
+                            Console.Write("[{0}] Warning! ", GetType().Name);
+                            Console.WriteLine("Discarding unsupported object of type {0}",  
                                 obj.ObjectType);
                             break;
                     }
