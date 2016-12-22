@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Content;
 using MonoGame.Extended.Maps.Tiled;
 using FarseerPhysics.Dynamics;
+using System.Linq;
 
 namespace SuperWizardPlatformer
 {
@@ -85,16 +86,18 @@ namespace SuperWizardPlatformer
         public void Update(GameTime gameTime)
         {
             // Delete entities that have been marked for removal from the scene.
-            foreach (var entity in Entities)
+            for (int i = 0; i < Entities.Count; ++i)
             {
-                if (entity.IsMarkedForRemoval)
+                if (Entities[i].IsMarkedForRemoval)
                 {
-                    if (entity.Drawable != null)
-                    {
-                        Drawables.Remove(entity.Drawable);
-                    }
-                    PhysicsWorld.RemoveBody(entity.Body);
-                    Entities.Remove(entity);
+                    var tmp = Entities[i];
+                    Entities[i] = Entities[Entities.Count - 1];
+                    Entities[Entities.Count - 1] = tmp;
+
+                    // Remove body entity from physics sim before removing from entities list.
+                    PhysicsWorld.RemoveBody(Entities[Entities.Count].Body);
+                    Entities.RemoveAt(Entities.Count - 1);
+                    --i;
                 }
             }
 
@@ -104,6 +107,7 @@ namespace SuperWizardPlatformer
                 entity.Update(this, gameTime);
             }
 
+            // One step of the physics simulation forward
             PhysicsWorld.Step(1.0f / 60.0f);
         }
 
@@ -119,8 +123,23 @@ namespace SuperWizardPlatformer
 
             spriteBatch.Begin();
 
+            // Draw background info from TMX map.
             map.Draw(spriteBatch, new Rectangle(0, 0, 640, 480));
 
+            // Delete drawables that have been marked for removal from the scene.
+            for (int i = 0; i < Drawables.Count; ++i)
+            {
+                if (Drawables[i].IsMarkedForRemoval)
+                {
+                    var tmp = Drawables[i];
+                    Drawables[i] = Drawables[Drawables.Count - 1];
+                    Drawables[Drawables.Count - 1] = tmp;
+                    Drawables.RemoveAt(Drawables.Count - 1);
+                    --i;
+                }
+            }
+
+            // Draw all remaining drawables.
             foreach (var drawable in Drawables)
             {
                 drawable.Draw(spriteBatch);

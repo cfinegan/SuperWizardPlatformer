@@ -53,6 +53,8 @@
     <ApplicationIcon>Icon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="DrawableEntity.cs" />
+    <Compile Include="Entity.cs" />
     <Compile Include="TextureDrawable.cs" />
     <Compile Include="DynamicBody.cs" />
     <Compile Include="Game1.cs" />

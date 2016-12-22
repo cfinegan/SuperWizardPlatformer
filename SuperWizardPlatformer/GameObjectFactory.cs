@@ -89,14 +89,14 @@ namespace SuperWizardPlatformer
 
                             body.FixedRotation = true;
 
-                            var entity = new DynamicBody(body, new Vector2(bodyWidth, bodyHeight));
-                            var drawable = new TextureDrawable(entity, map.GetTileRegion((int)obj.Gid));
+                            var entity = new DrawableEntity(body, new Vector2(bodyWidth, bodyHeight), map.GetTileRegion((int)obj.Gid));
+                            //var drawable = new TextureDrawable(entity, map.GetTileRegion((int)obj.Gid));
 
-                            body.UserData = entity;
-                            entity.Drawable = drawable;
+                            //body.UserData = entity;
+                            //entity.Drawable = drawable;
 
                             entities.Add(entity);
-                            drawables.Add(drawable);
+                            drawables.Add(entity);
                             break;
 
                         case TiledObjectType.Rectangle:

@@ -20,6 +20,8 @@ namespace SuperWizardPlatformer
             this.textureRegion = textureRegion;
         }
 
+        public bool IsMarkedForRemoval { get; set; }
+
         public void Draw(SpriteBatch spriteBatch)
         {
             if (parent.IsVisible)
