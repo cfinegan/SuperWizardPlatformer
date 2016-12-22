@@ -17,26 +17,9 @@ namespace SuperWizardPlatformer
 
         public Body Body { get; private set; }
 
-        public IDrawable Drawable { get; set; }
-
         public bool IsMarkedForRemoval { get; set; } = false;
 
         public bool IsVisible { get; set; }
-
-        public Vector2 Position
-        {
-            get
-            {
-                return Body.Position;
-            }
-
-            set
-            {
-                Body.Position = value;
-            }
-        }
-
-        public Vector2 Size { get; private set; }
 
         public abstract void Update(IScene scene, GameTime gameTime);
     }

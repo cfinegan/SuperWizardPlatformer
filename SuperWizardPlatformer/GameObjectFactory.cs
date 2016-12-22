@@ -28,6 +28,11 @@ namespace SuperWizardPlatformer
             physicsWorld = scene.PhysicsWorld;
         }
 
+        public void CreatePlayer()
+        {
+            throw new NotImplementedException();
+        }
+
         public void PopulateScene(TiledMap map)
         {
             const float DENSITY_DEFAULT = 1.0f;
@@ -49,6 +54,12 @@ namespace SuperWizardPlatformer
                     {
                         physics = PHYSICS_DEFAULT;
                     }
+
+                    //if (obj.Type.ToLower() == "player")
+                    //{
+                    //    CreatePlayer();
+                    //    return;
+                    //}
 
                     switch (obj.ObjectType)
                     {
@@ -90,10 +101,6 @@ namespace SuperWizardPlatformer
                             body.FixedRotation = true;
 
                             var entity = new DrawableEntity(body, new Vector2(bodyWidth, bodyHeight), map.GetTileRegion((int)obj.Gid));
-                            //var drawable = new TextureDrawable(entity, map.GetTileRegion((int)obj.Gid));
-
-                            //body.UserData = entity;
-                            //entity.Drawable = drawable;
 
                             entities.Add(entity);
                             drawables.Add(entity);
