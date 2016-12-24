@@ -9,7 +9,7 @@ using System.Linq;
 
 namespace SuperWizardPlatformer
 {
-    class GameplayScene : IScene
+    class GameplayScene : IScene, IEntityContainer
     {
         private const int CAPACITY_DEFAULT = 32;
         private const float GRAVITY_Y_DEFAULT = 9.8f;
@@ -37,13 +37,14 @@ namespace SuperWizardPlatformer
             content = new ContentManager(game.Services, game.Content.RootDirectory);
             map = content.Load<TiledMap>(mapName);
             spriteBatch = new SpriteBatch(game.GraphicsDevice);
-            factory = new GameObjectFactory(this, spriteBatch);
+            factory = new GameObjectFactory(this);
 
             if (map.BackgroundColor != null)
             {
                 bgColor = (Color)map.BackgroundColor;
             }
 
+            factory.CreateMapBoundaries(map);
             factory.PopulateScene(map);
         }
 

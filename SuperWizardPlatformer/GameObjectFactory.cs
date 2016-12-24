@@ -6,6 +6,7 @@ using FarseerPhysics.Factories;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.Maps.Tiled;
+using MonoGame.Extended.TextureAtlases;
 
 namespace SuperWizardPlatformer
 {
@@ -21,16 +22,78 @@ namespace SuperWizardPlatformer
         private List<IDrawable> drawables;
         private World physicsWorld;
 
-        public GameObjectFactory(IScene scene, SpriteBatch spriteBatch)
+        public GameObjectFactory(IScene scene)
         {
+            if (scene == null) { throw new ArgumentNullException(nameof(scene)); }
+
             entities = scene.Entities;
             drawables = scene.Drawables;
             physicsWorld = scene.PhysicsWorld;
         }
 
-        public void CreatePlayer()
+        public void CreatePlayer(Vector2 position, TextureRegion2D textureRegion)
         {
-            throw new NotImplementedException();
+            float bodyWidth = ConvertUnits.ToSimUnits(textureRegion.Width);
+            float bodyHeight = ConvertUnits.ToSimUnits(textureRegion.Height);
+            var body = BodyFactory.CreateRectangle(physicsWorld, bodyWidth, bodyHeight, 1.0f);
+            body.BodyType = BodyType.Dynamic;
+            body.FixedRotation = true;
+            body.Position = ConvertUnits.ToSimUnits(position);
+
+            Player player = new Player(body, textureRegion);
+
+            entities.Add(player);
+            drawables.Add(player);
+        }
+
+        public void CreateMapBoundaries(TiledMap map)
+        {
+            CreateLeftBoundary(map);
+            CreateRightBoundary(map);
+            CreateTopBoundary(map);
+            CreateBottomBoundary(map);
+        }
+
+        private void CreateLeftBoundary(TiledMap map)
+        {
+            float width = 10.0f;
+            float height = ConvertUnits.ToSimUnits(map.HeightInPixels);
+
+            var body = BodyFactory.CreateRectangle(physicsWorld, width, height, 1.0f);
+            body.BodyType = BodyType.Static;
+            body.Position = new Vector2(0 - (width * 0.5f), height * 0.5f);
+        }
+
+        private void CreateRightBoundary(TiledMap map)
+        {
+            float mapWidth = ConvertUnits.ToSimUnits(map.WidthInPixels);
+            float width = 10.0f;
+            float height = ConvertUnits.ToSimUnits(map.HeightInPixels);
+
+            var body = BodyFactory.CreateRectangle(physicsWorld, width, height, 1.0f);
+            body.BodyType = BodyType.Static;
+            body.Position = new Vector2(mapWidth + (width * 0.5f), height * 0.5f);
+        }
+
+        private void CreateTopBoundary(TiledMap map)
+        {
+            float width = ConvertUnits.ToSimUnits(map.WidthInPixels);
+            float height = 10.0f;
+
+            var body = BodyFactory.CreateRectangle(physicsWorld, width, height, 1.0f);
+            body.BodyType = BodyType.Static;
+            body.Position = new Vector2(width * 0.5f, 0 - (height * 0.5f));
+        }
+
+        private void CreateBottomBoundary(TiledMap map)
+        {
+            float mapHeight = ConvertUnits.ToSimUnits(map.HeightInPixels);
+            float width = ConvertUnits.ToSimUnits(map.WidthInPixels);
+            float height = 10.0f;
+
+            var body = BodyFactory.CreateRectangle(physicsWorld, width, height, 1.0f);
+            body.BodyType = BodyType.Static;
+            body.Position = new Vector2(width * 0.5f, mapHeight + (height * 0.5f));
         }
 
         public void PopulateScene(TiledMap map)
@@ -55,77 +118,80 @@ namespace SuperWizardPlatformer
                         physics = PHYSICS_DEFAULT;
                     }
 
-                    //if (obj.Type.ToLower() == "player")
-                    //{
-                    //    CreatePlayer();
-                    //    return;
-                    //}
-
-                    switch (obj.ObjectType)
+                    if (obj.Type.ToLower().Equals("player"))
                     {
-                        case TiledObjectType.Tile:
-                            if (obj.Gid == null)
-                            {
-                                var errMsg = string.Format("obj.Gid (ID: {0}, Name: {1})", obj.Id, obj.Name);
-                                throw new ArgumentNullException(errMsg);
-                            }
+                        var position = new Vector2(obj.X, obj.Y);
+                        var textureRegion = map.GetTileRegion((int)obj.Gid);
+                        CreatePlayer(position, textureRegion);
+                    }
+                    else
+                    {
+                        switch (obj.ObjectType)
+                        {
+                            case TiledObjectType.Tile:
+                                if (obj.Gid == null)
+                                {
+                                    var errMsg = string.Format("obj.Gid (ID: {0}, Name: {1})", obj.Id, obj.Name);
+                                    throw new ArgumentNullException(errMsg);
+                                }
 
-                            // Note that for TiledObjects of type Tile, obj.Y is the BOTTOM of the rectangle.
-                            var bodyCenter = ConvertUnits.ToSimUnits(new Vector2(
-                                obj.X + obj.Width / 2.0f, 
-                                obj.Y - obj.Height / 2.0f));
+                                // Note that for TiledObjects of type Tile, obj.Y is the BOTTOM of the rectangle.
+                                var bodyCenter = ConvertUnits.ToSimUnits(new Vector2(
+                                    obj.X + obj.Width / 2.0f,
+                                    obj.Y - obj.Height / 2.0f));
 
-                            float bodyWidth = ConvertUnits.ToSimUnits(obj.Width);
-                            float bodyHeight = ConvertUnits.ToSimUnits(obj.Height);
-                            var body = BodyFactory.CreateRectangle(physicsWorld, bodyWidth, bodyHeight, density, bodyCenter);
+                                float bodyWidth = ConvertUnits.ToSimUnits(obj.Width);
+                                float bodyHeight = ConvertUnits.ToSimUnits(obj.Height);
+                                var body = BodyFactory.CreateRectangle(physicsWorld, bodyWidth, bodyHeight, density, bodyCenter);
 
-                            switch (physics)
-                            {
-                                case "dynamic":
-                                    body.BodyType = BodyType.Dynamic;
-                                    break;
-                                case "kinematic":
-                                    body.BodyType = BodyType.Kinematic;
-                                    break;
-                                case "static":
-                                    body.BodyType = BodyType.Static;
-                                    break;
-                                default:
-                                    // This should only happen if the physics value read from the TMX data is invalid.
-                                    body.BodyType = BodyType.Static;
-                                    Console.Write("[{0}] Warning! ", GetType().Name);
-                                    Console.WriteLine("Unrecognized physics value of '{0}' - Defaulting to {1}", physics, body.BodyType);
-                                    break;
-                            }
+                                switch (physics)
+                                {
+                                    case "dynamic":
+                                        body.BodyType = BodyType.Dynamic;
+                                        break;
+                                    case "kinematic":
+                                        body.BodyType = BodyType.Kinematic;
+                                        break;
+                                    case "static":
+                                        body.BodyType = BodyType.Static;
+                                        break;
+                                    default:
+                                        // This should only happen if the physics value read from the TMX data is invalid.
+                                        body.BodyType = BodyType.Static;
+                                        Console.Write("[{0}] Warning! ", GetType().Name);
+                                        Console.WriteLine("Unrecognized physics value of '{0}' - Defaulting to {1}", physics, body.BodyType);
+                                        break;
+                                }
 
-                            body.FixedRotation = true;
+                                body.FixedRotation = true;
 
-                            var entity = new DrawableEntity(body, new Vector2(bodyWidth, bodyHeight), map.GetTileRegion((int)obj.Gid));
+                                var entity = new DrawableEntity(body, new Vector2(bodyWidth, bodyHeight), map.GetTileRegion((int)obj.Gid));
 
-                            entities.Add(entity);
-                            drawables.Add(entity);
-                            break;
+                                entities.Add(entity);
+                                drawables.Add(entity);
+                                break;
 
-                        case TiledObjectType.Rectangle:
-                            float rectWidth = ConvertUnits.ToSimUnits(obj.Width);
-                            float rectHeight = ConvertUnits.ToSimUnits(obj.Height);
-                            body = BodyFactory.CreateRectangle(physicsWorld, rectWidth, rectHeight, density);
+                            case TiledObjectType.Rectangle:
+                                float rectWidth = ConvertUnits.ToSimUnits(obj.Width);
+                                float rectHeight = ConvertUnits.ToSimUnits(obj.Height);
+                                body = BodyFactory.CreateRectangle(physicsWorld, rectWidth, rectHeight, density);
 
-                            // Note that for Rectangle TiledObjects, obj.Y is the TOP of the rectangle.
-                            bodyCenter = ConvertUnits.ToSimUnits(new Vector2(
-                                obj.X + obj.Width / 2.0f,
-                                obj.Y + obj.Height / 2.0f));
+                                // Note that for Rectangle TiledObjects, obj.Y is the TOP of the rectangle.
+                                bodyCenter = ConvertUnits.ToSimUnits(new Vector2(
+                                    obj.X + obj.Width / 2.0f,
+                                    obj.Y + obj.Height / 2.0f));
 
-                            body.Position = bodyCenter;
+                                body.Position = bodyCenter;
 
-                            body.BodyType = BodyType.Static;
-                            break;
+                                body.BodyType = BodyType.Static;
+                                break;
 
-                        default:
-                            Console.Write("[{0}] Warning! ", GetType().Name);
-                            Console.WriteLine("Discarding unsupported object of type {0}",  
-                                obj.ObjectType);
-                            break;
+                            default:
+                                Console.Write("[{0}] Warning! ", GetType().Name);
+                                Console.WriteLine("Discarding unsupported object of type {0}",
+                                    obj.ObjectType);
+                                break;
+                        }
                     }
                 }
             }
