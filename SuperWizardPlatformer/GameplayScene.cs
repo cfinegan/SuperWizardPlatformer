@@ -44,7 +44,7 @@ namespace SuperWizardPlatformer
                 bgColor = (Color)map.BackgroundColor;
             }
 
-            factory.CreateMapBoundaries(map);
+            MapBoundaryFactory.CreateAllBoundaries(PhysicsWorld, map);
             factory.PopulateScene(map);
         }
 

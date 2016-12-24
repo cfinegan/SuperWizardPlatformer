@@ -46,56 +46,6 @@ namespace SuperWizardPlatformer
             drawables.Add(player);
         }
 
-        public void CreateMapBoundaries(TiledMap map)
-        {
-            CreateLeftBoundary(map);
-            CreateRightBoundary(map);
-            CreateTopBoundary(map);
-            CreateBottomBoundary(map);
-        }
-
-        private void CreateLeftBoundary(TiledMap map)
-        {
-            float width = 10.0f;
-            float height = ConvertUnits.ToSimUnits(map.HeightInPixels);
-
-            var body = BodyFactory.CreateRectangle(physicsWorld, width, height, 1.0f);
-            body.BodyType = BodyType.Static;
-            body.Position = new Vector2(0 - (width * 0.5f), height * 0.5f);
-        }
-
-        private void CreateRightBoundary(TiledMap map)
-        {
-            float mapWidth = ConvertUnits.ToSimUnits(map.WidthInPixels);
-            float width = 10.0f;
-            float height = ConvertUnits.ToSimUnits(map.HeightInPixels);
-
-            var body = BodyFactory.CreateRectangle(physicsWorld, width, height, 1.0f);
-            body.BodyType = BodyType.Static;
-            body.Position = new Vector2(mapWidth + (width * 0.5f), height * 0.5f);
-        }
-
-        private void CreateTopBoundary(TiledMap map)
-        {
-            float width = ConvertUnits.ToSimUnits(map.WidthInPixels);
-            float height = 10.0f;
-
-            var body = BodyFactory.CreateRectangle(physicsWorld, width, height, 1.0f);
-            body.BodyType = BodyType.Static;
-            body.Position = new Vector2(width * 0.5f, 0 - (height * 0.5f));
-        }
-
-        private void CreateBottomBoundary(TiledMap map)
-        {
-            float mapHeight = ConvertUnits.ToSimUnits(map.HeightInPixels);
-            float width = ConvertUnits.ToSimUnits(map.WidthInPixels);
-            float height = 10.0f;
-
-            var body = BodyFactory.CreateRectangle(physicsWorld, width, height, 1.0f);
-            body.BodyType = BodyType.Static;
-            body.Position = new Vector2(width * 0.5f, mapHeight + (height * 0.5f));
-        }
-
         public void PopulateScene(TiledMap map)
         {
             const float DENSITY_DEFAULT = 1.0f;

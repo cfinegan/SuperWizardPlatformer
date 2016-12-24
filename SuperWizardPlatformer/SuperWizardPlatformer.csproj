@@ -62,6 +62,7 @@
     <Compile Include="IDrawable.cs" />
     <Compile Include="IEntity.cs" />
     <Compile Include="IScene.cs" />
+    <Compile Include="MapBoundaryFactory.cs" />
     <Compile Include="Player.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
