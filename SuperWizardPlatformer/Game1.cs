@@ -1,8 +1,7 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using MonoGame.Extended.ViewportAdapters;
-using System;
 
 namespace SuperWizardPlatformer
 {
@@ -12,9 +11,9 @@ namespace SuperWizardPlatformer
     public class Game1 : Game
     {
         GraphicsDeviceManager graphics;
+        RenderTarget2D renderTarget;
         SpriteBatch spriteBatch;
         IScene scene;
-        ViewportAdapter viewportAdapter;
 
         public Game1()
         {
@@ -30,19 +29,28 @@ namespace SuperWizardPlatformer
         /// </summary>
         protected override void Initialize()
         {
-            // TODO: Add your initialization logic here
             IsMouseVisible = true;
 
-            graphics.PreferredBackBufferWidth = 640;
-            graphics.PreferredBackBufferHeight = 480;
-            graphics.ApplyChanges();
+            // Enable window resizing.
+            Window.AllowUserResizing = true;
+            Window.ClientSizeChanged += new EventHandler<EventArgs>(OnClientSizeChanged);
 
+            // Game defaults to borderless window at display resolution (fake fullscreen).
+            EnableBorderlessFullscreen();
+
+            // Render target is used to separate internal resolution from display resolution.
+            renderTarget = new RenderTarget2D(
+                GraphicsDevice,
+                640,
+                480,
+                false,
+                GraphicsDevice.PresentationParameters.BackBufferFormat,
+                GraphicsDevice.PresentationParameters.DepthStencilFormat);
+
+            // Output some diagnostics before returning.
             Console.WriteLine("BackbufferWidth: {0}", graphics.PreferredBackBufferWidth);
             Console.WriteLine("BackbufferHeight: {0}", graphics.PreferredBackBufferHeight);
             Console.WriteLine("IsFixedTimeStep: {0}", IsFixedTimeStep);
-
-            viewportAdapter = new BoxingViewportAdapter(Window, graphics, 640, 480);
-            Window.AllowUserResizing = true;
 
             base.Initialize();
         }
@@ -68,6 +76,7 @@ namespace SuperWizardPlatformer
         {
             // TODO: Unload any non ContentManager content here
             UnloadScene();
+            renderTarget.Dispose();
             spriteBatch.Dispose();
         }
 
@@ -79,7 +88,17 @@ namespace SuperWizardPlatformer
         protected override void Update(GameTime gameTime)
         {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
+            {
                 Exit();
+            }
+            else if (Keyboard.GetState().IsKeyDown(Keys.F1))
+            {
+                Window.IsBorderless = false;
+            }
+            else if (Keyboard.GetState().IsKeyDown(Keys.F2))
+            {
+                EnableBorderlessFullscreen();
+            }
 
             // TODO: Add your update logic here
             scene.Update(gameTime);
@@ -93,10 +112,77 @@ namespace SuperWizardPlatformer
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
-            // TODO: Add your drawing code here
+            // Draw scene to render target.
+            GraphicsDevice.SetRenderTarget(renderTarget);
             scene.Draw(GraphicsDevice, gameTime);
+            GraphicsDevice.SetRenderTarget(null);
+
+            // Draw render target to screen.
+            GraphicsDevice.Clear(Color.Black);
+            spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Opaque);
+            spriteBatch.Draw(renderTarget, CalculateViewRectangle(), Color.White);
+            spriteBatch.End();
 
             base.Draw(gameTime);
+        }
+
+        /// <summary>
+        /// Calculates the correct rectangle for drawing scaled graphical output to the screen
+        /// without stretching.
+        /// </summary>
+        /// <returns>Rectangle representing the region of the screen to draw.</returns>
+        private Rectangle CalculateViewRectangle()
+        {
+            float outputAspect = Window.ClientBounds.Width /
+                (float)Window.ClientBounds.Height;
+
+            float preferredAspect = renderTarget.Width /
+                (float)renderTarget.Height;
+
+            Rectangle dst;
+
+            if (outputAspect <= preferredAspect)
+            {
+                // Output is taller than it is wide, bars on top/bottom.
+                int presentHeight = (int)((Window.ClientBounds.Width / preferredAspect) + 0.5f);
+                int barHeight = (Window.ClientBounds.Height - presentHeight) / 2;
+                dst = new Rectangle(0, barHeight, Window.ClientBounds.Width, presentHeight);
+            }
+            else
+            {
+                // Output is wider than it is tall, bars on left/right.
+                int presentWidth = (int)((Window.ClientBounds.Height * preferredAspect) + 0.5f);
+                int barWidth = (Window.ClientBounds.Width - presentWidth) / 2;
+                dst = new Rectangle(barWidth, 0, presentWidth, Window.ClientBounds.Height);
+            }
+
+            return dst;
+        }
+
+        /// <summary>
+        /// Adjusts the graphics device's preferred width/height so that it never performs any
+        /// scaling of the output. The if statement prevents a stack overflow.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void OnClientSizeChanged(object sender, EventArgs e)
+        {
+            if (graphics.PreferredBackBufferWidth != Window.ClientBounds.Width ||
+                graphics.PreferredBackBufferHeight != Window.ClientBounds.Height)
+            {
+                graphics.PreferredBackBufferWidth = Window.ClientBounds.Width;
+                graphics.PreferredBackBufferHeight = Window.ClientBounds.Height;
+                graphics.ApplyChanges();
+            }
+        }
+
+        private void EnableBorderlessFullscreen()
+        {
+            Window.IsBorderless = true;
+            Window.Position = Point.Zero;
+            graphics.PreferredBackBufferWidth = GraphicsDevice.DisplayMode.Width;
+            graphics.PreferredBackBufferHeight = GraphicsDevice.DisplayMode.Height;
+            graphics.ApplyChanges();
         }
 
         private void LoadScene(IScene scene)
