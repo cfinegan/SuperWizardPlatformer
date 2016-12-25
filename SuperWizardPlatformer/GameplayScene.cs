@@ -31,7 +31,7 @@ namespace SuperWizardPlatformer
             if (game == null) { throw new ArgumentNullException(nameof(game)); }
             if (string.IsNullOrWhiteSpace(mapName))
             {
-                throw new ArgumentNullException(string.Format("{0}: '{1}'", nameof(mapName), mapName));
+                throw new ArgumentException(nameof(mapName), mapName);
             }
 
             content = new ContentManager(game.Services, game.Content.RootDirectory);

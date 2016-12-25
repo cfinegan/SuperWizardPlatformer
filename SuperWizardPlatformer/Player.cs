@@ -32,7 +32,7 @@ namespace SuperWizardPlatformer
         public void Update(IScene scene, GameTime gameTime)
         {
             float xVel = 0, yVel = 0;
-            float velFactor = 0.005f;
+            float velFactor = 0.0025f;
 
             if (Keyboard.GetState().IsKeyDown(Keys.Left))
             {

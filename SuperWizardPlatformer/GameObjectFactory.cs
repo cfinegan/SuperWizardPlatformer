@@ -4,7 +4,6 @@ using FarseerPhysics;
 using FarseerPhysics.Dynamics;
 using FarseerPhysics.Factories;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.Maps.Tiled;
 using MonoGame.Extended.TextureAtlases;
 
@@ -81,8 +80,8 @@ namespace SuperWizardPlatformer
                             case TiledObjectType.Tile:
                                 if (obj.Gid == null)
                                 {
-                                    var errMsg = string.Format("obj.Gid (ID: {0}, Name: {1})", obj.Id, obj.Name);
-                                    throw new ArgumentNullException(errMsg);
+                                    throw new ArgumentNullException(
+                                        "obj.Gid", string.Format("ID: {0}, Name: {1}", obj.Id, obj.Name));
                                 }
 
                                 // Note that for TiledObjects of type Tile, obj.Y is the BOTTOM of the rectangle.

@@ -57,7 +57,7 @@ namespace SuperWizardPlatformer
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
             // TODO: use this.Content to load your game content here
-            scene = new GameplayScene(this, "mario_test");
+            LoadScene(new GameplayScene(this, "mario_test"));
         }
 
         /// <summary>
@@ -97,6 +97,22 @@ namespace SuperWizardPlatformer
             scene.Draw(GraphicsDevice, gameTime);
 
             base.Draw(gameTime);
+        }
+
+        private void LoadScene(IScene scene)
+        {
+            if (this.scene != null && !this.scene.IsDisposed)
+            {
+                this.scene.Dispose();
+            }
+
+            this.scene = scene;
+            GC.Collect();
+        }
+
+        private void UnloadScene()
+        {
+            LoadScene(null);
         }
     }
 }
