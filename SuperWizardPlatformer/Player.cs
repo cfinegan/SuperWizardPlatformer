@@ -46,12 +46,12 @@ namespace SuperWizardPlatformer
 
             if (Keyboard.GetState().IsKeyDown(Keys.Up))
             {
-                yVel -= velFactor;
+                yVel -= velFactor * 5;
             }
 
             if (Keyboard.GetState().IsKeyDown(Keys.Down))
             {
-                yVel += velFactor;
+                yVel += velFactor * 5;
             }
 
             Body.ApplyLinearImpulse(new Vector2(xVel, yVel));

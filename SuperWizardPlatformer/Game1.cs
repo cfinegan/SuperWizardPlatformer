@@ -67,7 +67,7 @@ namespace SuperWizardPlatformer
         protected override void UnloadContent()
         {
             // TODO: Unload any non ContentManager content here
-            scene.Dispose();
+            UnloadScene();
             spriteBatch.Dispose();
         }
 
