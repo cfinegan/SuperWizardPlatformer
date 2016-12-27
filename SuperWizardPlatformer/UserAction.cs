@@ -2,8 +2,10 @@
 {
     enum UserAction
     {
+        None = 0,
         MoveLeft,
         MoveRight,
-        Jump
+        Jump,
+        Duck
     }
 }

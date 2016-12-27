@@ -34,22 +34,22 @@ namespace SuperWizardPlatformer
             float xVel = 0, yVel = 0;
             float velFactor = 0.0025f;
 
-            if (Keyboard.GetState().IsKeyDown(Keys.Left))
+            if (InputMapper.IsPressed(UserAction.MoveLeft))
             {
                 xVel -= velFactor;
             }
 
-            if (Keyboard.GetState().IsKeyDown(Keys.Right))
+            if (InputMapper.IsPressed(UserAction.MoveRight))
             {
                 xVel += velFactor;
             }
 
-            if (Keyboard.GetState().IsKeyDown(Keys.Up))
+            if (InputMapper.IsPressed(UserAction.Jump))
             {
                 yVel -= velFactor * 5;
             }
 
-            if (Keyboard.GetState().IsKeyDown(Keys.Down))
+            if (InputMapper.IsPressed(UserAction.Duck))
             {
                 yVel += velFactor * 5;
             }

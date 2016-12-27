@@ -4,82 +4,45 @@ using System.Linq;
 
 namespace SuperWizardPlatformer
 {
-    class KeyStateTracker
+    static class KeyStateTracker
     {
-        private static int NUM_KEYS = Enum.GetValues(typeof(Keys)).Cast<int>().Max() + 1;
+        private static readonly int NUM_KEYS = Enum.GetValues(typeof(Keys)).Cast<int>().Max() + 1;
 
-        private KeyState[] keys = new KeyState[NUM_KEYS];
+        private static KeyState[] keys = new KeyState[NUM_KEYS];
 
-        public KeyStateTracker()
-        {
-            // Diagnostic info to make sure NUM_KEYS is a reasonable size.
-            Console.WriteLine("Initializing {0} | {1} = {2}", 
-                nameof(KeyStateTracker), nameof(NUM_KEYS), NUM_KEYS);
-
-            // Technically may be redundant since .NET initializes all memory to zero,
-            // but best to be safe.
-            for (int i = 0; i < keys.Length; ++i)
-            {
-                keys[i] = KeyState.NullValue;
-            }
-        }
-
-        public void Update()
+        public static void Update()
         {
             for (int i = 0; i < keys.Length; ++i)
             {
-                keys[i].JustPressed = false;
-                keys[i].JustReleased = false;
+                keys[i].PressedLastFrame = keys[i].PressedThisFrame;
+                keys[i].PressedThisFrame = false;
             }
 
-            for (int i = 0; i < keys.Length; ++i)
+            foreach (var k in Keyboard.GetState().GetPressedKeys())
             {
-                if (Keyboard.GetState().IsKeyDown((Keys)i))
-                {
-                    if (!keys[i].IsPressed)
-                    {
-                        keys[i].JustPressed = true;
-                    }
-                    keys[i].IsPressed = true;
-                }
-                else
-                {
-                    if (keys[i].IsPressed)
-                    {
-                        keys[i].JustReleased = true;
-                    }
-                    keys[i].IsPressed = false;
-                }
+                keys[(int)k].PressedThisFrame = true;
             }
         }
 
-        public bool IsPressed(Keys key)
+        public static bool IsPressed(Keys key)
         {
-            return keys[(int)key].IsPressed;
+            return keys[(int)key].PressedThisFrame;
         }
 
-        public bool JustPressed(Keys key)
+        public static bool JustPressed(Keys key)
         {
-            return keys[(int)key].IsPressed && keys[(int)key].JustPressed;
+            return keys[(int)key].PressedThisFrame && (!keys[(int)key].PressedLastFrame);
         }
 
-        public bool JustReleased(Keys key)
+        public static bool JustReleased(Keys key)
         {
-            return (!keys[(int)key].IsPressed) && keys[(int)key].JustReleased;
+            return (!keys[(int)key].PressedThisFrame) && keys[(int)key].PressedLastFrame;
         }
 
         private struct KeyState
         {
-            public bool JustPressed;
-            public bool JustReleased;
-            public bool IsPressed;
-
-            internal static KeyState NullValue = new KeyState()
-            {
-                JustPressed = false,
-                JustReleased = false,
-                IsPressed = false
-            };
+            public bool PressedThisFrame;
+            public bool PressedLastFrame;
         }
     }
 }

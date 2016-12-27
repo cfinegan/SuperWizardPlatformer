@@ -16,8 +16,6 @@ namespace SuperWizardPlatformer
         SpriteBatch spriteBatch;
         IScene scene;
 
-        KeyStateTracker keyTracker;
-
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -33,7 +31,8 @@ namespace SuperWizardPlatformer
         protected override void Initialize()
         {
             resolution = new WindowModeAdjuster(graphics, Window);
-            keyTracker = new KeyStateTracker();
+
+            InputMapper.Initialize();
 
             IsMouseVisible = true;
             Window.AllowUserResizing = true;
@@ -90,9 +89,9 @@ namespace SuperWizardPlatformer
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
-            keyTracker.Update();
+            KeyStateTracker.Update();
 
-            if (keyTracker.JustPressed(Keys.Escape))
+            if (KeyStateTracker.JustPressed(Keys.Escape))
             {
                 Exit();
             }
