@@ -11,6 +11,7 @@ namespace SuperWizardPlatformer
     public class Game1 : Game
     {
         GraphicsDeviceManager graphics;
+        WindowModeAdjuster resolution;
         RenderTarget2D renderTarget;
         SpriteBatch spriteBatch;
         IScene scene;
@@ -29,14 +30,13 @@ namespace SuperWizardPlatformer
         /// </summary>
         protected override void Initialize()
         {
-            IsMouseVisible = true;
+            resolution = new WindowModeAdjuster(graphics, Window);
 
-            // Enable window resizing.
+            IsMouseVisible = true;
             Window.AllowUserResizing = true;
-            Window.ClientSizeChanged += new EventHandler<EventArgs>(OnClientSizeChanged);
 
             // Game defaults to borderless window at display resolution (fake fullscreen).
-            EnableBorderlessFullscreen();
+            resolution.EnableBorderlessFullscreen();
 
             // Render target is used to separate internal resolution from display resolution.
             renderTarget = new RenderTarget2D(
@@ -93,14 +93,13 @@ namespace SuperWizardPlatformer
             }
             else if (Keyboard.GetState().IsKeyDown(Keys.F1))
             {
-                Window.IsBorderless = false;
+                resolution.EnableBorderedWindow();
             }
             else if (Keyboard.GetState().IsKeyDown(Keys.F2))
             {
-                EnableBorderlessFullscreen();
+                resolution.EnableBorderlessFullscreen();
             }
 
-            // TODO: Add your update logic here
             scene.Update(gameTime);
 
             base.Update(gameTime);
@@ -157,32 +156,6 @@ namespace SuperWizardPlatformer
             }
 
             return dst;
-        }
-
-        /// <summary>
-        /// Adjusts the graphics device's preferred width/height so that it never performs any
-        /// scaling of the output. The if statement prevents a stack overflow.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void OnClientSizeChanged(object sender, EventArgs e)
-        {
-            if (graphics.PreferredBackBufferWidth != Window.ClientBounds.Width ||
-                graphics.PreferredBackBufferHeight != Window.ClientBounds.Height)
-            {
-                graphics.PreferredBackBufferWidth = Window.ClientBounds.Width;
-                graphics.PreferredBackBufferHeight = Window.ClientBounds.Height;
-                graphics.ApplyChanges();
-            }
-        }
-
-        private void EnableBorderlessFullscreen()
-        {
-            Window.IsBorderless = true;
-            Window.Position = Point.Zero;
-            graphics.PreferredBackBufferWidth = GraphicsDevice.DisplayMode.Width;
-            graphics.PreferredBackBufferHeight = GraphicsDevice.DisplayMode.Height;
-            graphics.ApplyChanges();
         }
 
         private void LoadScene(IScene scene)
