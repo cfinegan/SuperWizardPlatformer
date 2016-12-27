@@ -6,6 +6,11 @@
         MoveLeft,
         MoveRight,
         Jump,
-        Duck
+        Duck,
+        MenuDown,
+        MenuUp,
+        MenuLeft,
+        MenuRight,
+        MenuAccept
     }
 }

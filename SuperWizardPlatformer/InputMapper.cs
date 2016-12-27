@@ -12,12 +12,22 @@ namespace SuperWizardPlatformer
         private static Keys[] keyMappings = new Keys[NUM_ACTIONS];
 
         public static void Initialize()
-        {
+        {           
+            // Gameplay key mappings
+            // TODO: Make configurable by user.
             keyMappings[(int)UserAction.None] = Keys.None;
             keyMappings[(int)UserAction.MoveLeft] = Keys.Left;
             keyMappings[(int)UserAction.MoveRight] = Keys.Right;
             keyMappings[(int)UserAction.Jump] = Keys.Up;
             keyMappings[(int)UserAction.Duck] = Keys.Down;
+
+            // Menu key mappings
+            // These should stay hard-coded so that users can't break the menus.
+            keyMappings[(int)UserAction.MenuDown] = Keys.Down;
+            keyMappings[(int)UserAction.MenuUp] = Keys.Up;
+            keyMappings[(int)UserAction.MenuLeft] = Keys.Left;
+            keyMappings[(int)UserAction.MenuRight] = Keys.Right;
+            keyMappings[(int)UserAction.MenuAccept] = Keys.Enter;
         }
 
         public static bool IsPressed(UserAction action)

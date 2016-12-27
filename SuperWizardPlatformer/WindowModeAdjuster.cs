@@ -20,8 +20,8 @@ namespace SuperWizardPlatformer
             this.graphics = graphics;
             this.window = window;
 
-            lastWindowWidth = 1280;
-            lastWindowHeight = 720;
+            lastWindowWidth = 1024;
+            lastWindowHeight = 768;
 
             lastWindowPosition = new Point(
                 device.DisplayMode.Width / 2 - lastWindowWidth / 2,
@@ -70,6 +70,18 @@ namespace SuperWizardPlatformer
             graphics.PreferredBackBufferWidth = lastWindowWidth;
             graphics.PreferredBackBufferHeight = lastWindowHeight;
             graphics.ApplyChanges();
+        }
+
+        public void ToggleBorderlessFullscreen()
+        {
+            if (!window.IsBorderless)
+            {
+                EnableBorderlessFullscreen();
+            }
+            else
+            {
+                EnableBorderedWindow();
+            }
         }
 
         /// <summary>

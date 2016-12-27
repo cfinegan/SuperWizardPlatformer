@@ -95,19 +95,10 @@ namespace SuperWizardPlatformer
             {
                 Exit();
             }
-
-            //if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
-            //{
-            //    Exit();
-            //}
-            //else if (Keyboard.GetState().IsKeyDown(Keys.F1))
-            //{
-            //    resolution.EnableBorderedWindow();
-            //}
-            //else if (Keyboard.GetState().IsKeyDown(Keys.F2))
-            //{
-            //    resolution.EnableBorderlessFullscreen();
-            //}
+            if (KeyStateTracker.IsAltEnterJustPressed)
+            {
+                resolution.ToggleBorderlessFullscreen();
+            }
 
             scene.Update(gameTime);
 
