@@ -37,7 +37,7 @@ namespace SuperWizardPlatformer
             IsMouseVisible = true;
             Window.AllowUserResizing = true;
 
-            // Game defaults to borderless window at display resolution (fake fullscreen).
+            // Game defaults to normal, bordered window at WindowModeAdjuster's default resolution.
             resolution.EnableBorderedWindow();
 
             // Render target is used to separate internal resolution from display resolution.

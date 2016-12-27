@@ -4,6 +4,11 @@ using System.Linq;
 
 namespace SuperWizardPlatformer
 {
+    /// <summary>
+    /// Tracks the current and previous state of all keys recognizable by the framework.
+    /// This class may be used to query for the status of specific keys, and is also used by
+    /// InputMapper to translate key strokes into UserAction values.
+    /// </summary>
     static class KeyStateTracker
     {
         // Get the total number of keys recognized by the framework for use as array bound.
@@ -15,6 +20,11 @@ namespace SuperWizardPlatformer
         private static bool isAltEnterPressedThisFrame = false;
         private static bool isAltEnterPressedLastFrame = false;
 
+        /// <summary>
+        /// Updates the tracker so that it reports correct values for the current frame. This
+        /// method should be called once and only once per frame, at the very beginning of the
+        /// update cycle.
+        /// </summary>
         public static void Update()
         {
             // Set 'PressedLastFrame' field for each key, and clear values for current frame.
@@ -42,6 +52,11 @@ namespace SuperWizardPlatformer
             }
         }
 
+        /// <summary>
+        /// Denotes whether the user pressed Alt+Enter since the last update cycle. This is
+        /// considered a special value separate from other keystrokes so that the game can
+        /// recognize the difference between the user pressing Alt+Enter and just pressing Enter.
+        /// </summary>
         public static bool IsAltEnterJustPressed
         {
             get
@@ -50,21 +65,44 @@ namespace SuperWizardPlatformer
             }
         }
 
+        /// <summary>
+        /// Determines whether the specified key is currently being held down. This will return
+        /// true even if the key has just been pressed.
+        /// </summary>
+        /// <param name="key">The key value being queried for.</param>
+        /// <returns>true if 'key' is currently being held down, false otherwise.</returns>
         public static bool IsPressed(Keys key)
         {
             return keys[(int)key].PressedThisFrame;
         }
 
+        /// <summary>
+        /// Determines whether the specified key was just presesed this frame. Useful for game
+        /// events that need to execute when the key is first pressed, but shouldn't re-execute
+        /// every frame that the key is held down.
+        /// </summary>
+        /// <param name="key">The key value being queried for.</param>
+        /// <returns>true if 'key' was just pressed this frame, false otherwise.</returns>
         public static bool JustPressed(Keys key)
         {
             return keys[(int)key].PressedThisFrame && (!keys[(int)key].PressedLastFrame);
         }
 
+        /// <summary>
+        /// Determines whether the specified key was just released this frame. Useful for game
+        /// events that need to execute when the key is first released, but shouldn't re-execute
+        /// every frame that the key is not pressed.
+        /// </summary>
+        /// <param name="key">The key value being queried for.</param>
+        /// <returns>true if 'key' was just released this frame, false otherwise.</returns>
         public static bool JustReleased(Keys key)
         {
             return (!keys[(int)key].PressedThisFrame) && keys[(int)key].PressedLastFrame;
         }
 
+        /// <summary>
+        /// Simple value type that encapsulates the current and previous state of a key.
+        /// </summary>
         private struct KeyState
         {
             public bool PressedThisFrame;
