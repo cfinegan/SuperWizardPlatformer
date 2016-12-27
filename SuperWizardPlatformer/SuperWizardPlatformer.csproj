@@ -61,11 +61,14 @@
     <Compile Include="GameplayScene.cs" />
     <Compile Include="IDrawable.cs" />
     <Compile Include="IEntity.cs" />
+    <Compile Include="InputMapper.cs" />
+    <Compile Include="KeyStateTracker.cs" />
     <Compile Include="IScene.cs" />
     <Compile Include="MapBoundaryFactory.cs" />
     <Compile Include="Player.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UserAction.cs" />
     <Compile Include="WindowModeAdjuster.cs" />
   </ItemGroup>
   <ItemGroup>

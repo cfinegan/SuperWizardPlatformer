@@ -16,6 +16,8 @@ namespace SuperWizardPlatformer
         SpriteBatch spriteBatch;
         IScene scene;
 
+        KeyStateTracker keyTracker;
+
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -31,12 +33,13 @@ namespace SuperWizardPlatformer
         protected override void Initialize()
         {
             resolution = new WindowModeAdjuster(graphics, Window);
+            keyTracker = new KeyStateTracker();
 
             IsMouseVisible = true;
             Window.AllowUserResizing = true;
 
             // Game defaults to borderless window at display resolution (fake fullscreen).
-            resolution.EnableBorderlessFullscreen();
+            resolution.EnableBorderedWindow();
 
             // Render target is used to separate internal resolution from display resolution.
             renderTarget = new RenderTarget2D(
@@ -87,18 +90,25 @@ namespace SuperWizardPlatformer
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
+            keyTracker.Update();
+
+            if (keyTracker.JustPressed(Keys.Escape))
             {
                 Exit();
             }
-            else if (Keyboard.GetState().IsKeyDown(Keys.F1))
-            {
-                resolution.EnableBorderedWindow();
-            }
-            else if (Keyboard.GetState().IsKeyDown(Keys.F2))
-            {
-                resolution.EnableBorderlessFullscreen();
-            }
+
+            //if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
+            //{
+            //    Exit();
+            //}
+            //else if (Keyboard.GetState().IsKeyDown(Keys.F1))
+            //{
+            //    resolution.EnableBorderedWindow();
+            //}
+            //else if (Keyboard.GetState().IsKeyDown(Keys.F2))
+            //{
+            //    resolution.EnableBorderlessFullscreen();
+            //}
 
             scene.Update(gameTime);
 
