@@ -90,6 +90,7 @@ namespace SuperWizardPlatformer
         protected override void Update(GameTime gameTime)
         {
             KeyStateTracker.Update();
+            GamePadStateTracker.Update();
 
             if (KeyStateTracker.JustPressed(Keys.Escape))
             {

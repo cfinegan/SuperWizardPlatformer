@@ -11,6 +11,7 @@
         MenuUp,
         MenuLeft,
         MenuRight,
-        MenuAccept
+        MenuAccept,
+        MenuCancel
     }
 }
