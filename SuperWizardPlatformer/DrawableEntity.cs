@@ -34,11 +34,7 @@ namespace SuperWizardPlatformer
                     Body.Position.X - halfSize.X, 
                     Body.Position.Y - halfSize.Y);
 
-                spriteBatch.Draw(
-                    textureRegion.Texture, 
-                    ConvertUnits.ToDisplayUnits(texturePos), 
-                    null, 
-                    textureRegion.Bounds);
+                spriteBatch.Draw(textureRegion, ConvertUnits.ToDisplayUnits(texturePos), Color.White);
             }
         }
     }
