@@ -10,10 +10,10 @@ namespace SuperWizardPlatformer.Input
     static class KeyStateTracker
     {
         // Get the total number of keys recognized by the framework for use as array bound.
-        private static readonly int NUM_KEYS = Enum.GetValues(typeof(Keys)).Cast<int>().Max() + 1;
+        public static int NumKeys { get; } = Enum.GetValues(typeof(Keys)).Cast<int>().Max() + 1;
 
         // Each item in array should default to 'false' in both fields.
-        private static KeyState[] keys = new KeyState[NUM_KEYS];
+        private static KeyState[] keys = new KeyState[NumKeys];
 
         private static bool isAltEnterPressedThisFrame = false;
         private static bool isAltEnterPressedLastFrame = false;

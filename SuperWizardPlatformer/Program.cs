@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Microsoft.Xna.Framework.Input;
+using SuperWizardPlatformer.Input;
+using System;
 using System.IO;
 using System.Runtime;
 
@@ -10,6 +12,16 @@ namespace SuperWizardPlatformer
     /// </summary>
     public static class Program
     {
+
+        // assign a string indicating debug/release mode for logger.
+        const string debugMode =
+#if DEBUG
+        "DEBUG"
+#else
+        "RELEASE"
+#endif
+            ;
+
         /// <summary>
         /// The main entry point for the application.
         /// </summary>
@@ -39,11 +51,14 @@ namespace SuperWizardPlatformer
                 GCSettings.LatencyMode = GCLatencyMode.SustainedLowLatency;
 
                 // Write start-of-process info to log.
-                Console.WriteLine("SuperWizardPlatformer v0.1");
+                Console.WriteLine("SuperWizardPlatformer v0.1 {0}", debugMode);
                 Console.WriteLine("Running {0}-bit process on {1}-bit system",
                     Environment.Is64BitProcess ? 64 : 32,
                     Environment.Is64BitOperatingSystem ? 64 : 32);
                 Console.WriteLine("GCLatencyMode: {0}", GCSettings.LatencyMode);
+                Console.WriteLine("{0}: {1}", nameof(GamePad.MaximumGamePadCount), 
+                    GamePad.MaximumGamePadCount);
+                Console.WriteLine("Number of key codes: {0}", KeyStateTracker.NumKeys);
 
                 using (var game = new Game1())
                 {
@@ -64,4 +79,4 @@ namespace SuperWizardPlatformer
         }
     }
 #endif
-}
+    }

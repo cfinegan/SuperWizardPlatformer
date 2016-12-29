@@ -41,8 +41,8 @@ namespace SuperWizardPlatformer
             IsMouseVisible = true;
             Window.AllowUserResizing = true;
 
-            // Game defaults to normal, bordered window at WindowModeAdjuster's default resolution.
-            resolution.EnableBorderedWindow();
+            // Load default screen configuration.
+            EnableDefaultScreenProperties();
 
             // Render target is used to separate internal resolution from display resolution.
             renderTarget = new RenderTarget2D(
@@ -177,6 +177,20 @@ namespace SuperWizardPlatformer
         private void UnloadScene()
         {
             LoadScene(null);
+        }
+
+        /// <summary>
+        /// In debug mode, the default screen config is a normal bordered window. In release mode,
+        /// however, the default is fullscreen (this is a snappier presentation for people who
+        /// haven't seen the game before).
+        /// </summary>
+        private void EnableDefaultScreenProperties()
+        {
+#if DEBUG
+            resolution.EnableBorderedWindow();
+#else
+            resolution.EnableBorderlessFullscreen();
+#endif
         }
     }
 }
