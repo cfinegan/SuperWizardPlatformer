@@ -78,7 +78,7 @@ namespace SuperWizardPlatformer
                 GamePadStateTracker.JustReleased(padMappings[(int)action]);
         }
 
-        private struct KeyPair
+        public struct KeyPair
         {
             public Keys first;
             public Keys second;

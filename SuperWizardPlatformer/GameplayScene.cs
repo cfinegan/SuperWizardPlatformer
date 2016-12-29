@@ -5,7 +5,6 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Content;
 using MonoGame.Extended.Maps.Tiled;
 using FarseerPhysics.Dynamics;
-using System.Linq;
 
 namespace SuperWizardPlatformer
 {
@@ -20,6 +19,7 @@ namespace SuperWizardPlatformer
         private TiledMap map;
         private SpriteBatch spriteBatch;
         private GameObjectFactory factory;
+        private GameplayCamera camera;
 
         /// <summary>
         /// Constructs a new scene.
@@ -46,6 +46,9 @@ namespace SuperWizardPlatformer
 
             MapBoundaryFactory.CreateAllBoundaries(PhysicsWorld, map);
             factory.PopulateScene(map);
+
+            camera = new GameplayCamera(game.GraphicsDevice);
+            camera.Follow(Entities[2]);
         }
 
         public List<IEntity> Entities { get; private set; } = new List<IEntity>(CAPACITY_DEFAULT);
@@ -120,12 +123,7 @@ namespace SuperWizardPlatformer
         /// <param name="gameTime">Information about how much real-world time has passed since the last update.</param>
         public void Draw(GraphicsDevice graphicsDevice, GameTime gameTime)
         {
-            graphicsDevice.Clear(bgColor);
-
-            spriteBatch.Begin();
-
-            // Draw background info from TMX map.
-            map.Draw(spriteBatch, new Rectangle(0, 0, 640, 480));
+            camera.UpdatePosition();
 
             // Delete drawables that have been marked for removal from the scene.
             for (int i = 0; i < Drawables.Count; ++i)
@@ -139,6 +137,13 @@ namespace SuperWizardPlatformer
                     --i;
                 }
             }
+
+            graphicsDevice.Clear(bgColor);
+
+            spriteBatch.Begin(SpriteSortMode.Deferred, null, null, null, null, null, camera.GetViewMatrix());
+
+            // Draw background info from TMX map.
+            map.Draw(spriteBatch, new Rectangle(0, 0, 320, 240));
 
             // Draw all remaining drawables.
             foreach (var drawable in Drawables)

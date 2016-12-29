@@ -56,6 +56,7 @@
     <Compile Include="DrawableEntity.cs" />
     <Compile Include="Entity.cs" />
     <Compile Include="GamePadStateTracker.cs" />
+    <Compile Include="GameplayCamera.cs" />
     <Compile Include="IEntityContainer.cs" />
     <Compile Include="Game1.cs" />
     <Compile Include="GameObjectFactory.cs" />

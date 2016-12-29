@@ -43,8 +43,8 @@ namespace SuperWizardPlatformer
             // Render target is used to separate internal resolution from display resolution.
             renderTarget = new RenderTarget2D(
                 GraphicsDevice,
-                640,
-                480,
+                320,
+                240,
                 false,
                 GraphicsDevice.PresentationParameters.BackBufferFormat,
                 GraphicsDevice.PresentationParameters.DepthStencilFormat);
@@ -76,7 +76,7 @@ namespace SuperWizardPlatformer
         /// </summary>
         protected override void UnloadContent()
         {
-            // TODO: Unload any non ContentManager content here
+            // Unload any non ContentManager content here
             UnloadScene();
             renderTarget.Dispose();
             spriteBatch.Dispose();
