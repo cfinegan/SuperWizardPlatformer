@@ -45,13 +45,8 @@ namespace SuperWizardPlatformer
             EnableDefaultScreenProperties();
 
             // Render target is used to separate internal resolution from display resolution.
-            renderTarget = new RenderTarget2D(
-                GraphicsDevice,
-                InternalResolution.Width,
-                InternalResolution.Height,
-                false,
-                GraphicsDevice.PresentationParameters.BackBufferFormat,
-                GraphicsDevice.PresentationParameters.DepthStencilFormat);
+            renderTarget = new RenderTarget2D(GraphicsDevice, 
+                InternalResolution.Width, InternalResolution.Height);
 
             // Output some diagnostics before returning.
             Console.WriteLine("BackbufferWidth: {0}", graphics.PreferredBackBufferWidth);
