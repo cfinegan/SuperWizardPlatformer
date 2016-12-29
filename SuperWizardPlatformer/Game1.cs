@@ -119,7 +119,7 @@ namespace SuperWizardPlatformer
 
             // Draw render target to screen.
             GraphicsDevice.Clear(Color.Black);
-            spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Opaque);
+            spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Opaque, SamplerState.PointClamp);
             spriteBatch.Draw(renderTarget, CalculateViewRectangle(), Color.White);
             spriteBatch.End();
 

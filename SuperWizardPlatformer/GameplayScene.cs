@@ -32,7 +32,7 @@ namespace SuperWizardPlatformer
             if (game == null) { throw new ArgumentNullException(nameof(game)); }
             if (string.IsNullOrWhiteSpace(mapName))
             {
-                throw new ArgumentException(nameof(mapName), mapName);
+                throw new ArgumentNullException(nameof(mapName));
             }
 
             content = new ContentManager(game.Services, game.Content.RootDirectory);
@@ -120,8 +120,7 @@ namespace SuperWizardPlatformer
         }
 
         /// <summary>
-        /// Draws the scene, taking into account the background, camera, and all active entities
-        /// and drawables.
+        /// Draws the scene, taking into account the background, camera, and all active drawables.
         /// </summary>
         /// <param name="graphicsDevice">The Monogame GraphicsDevice to use for drawing.</param>
         /// <param name="gameTime">Information about how much real-world time has passed since the last update.</param>
@@ -144,10 +143,10 @@ namespace SuperWizardPlatformer
 
             graphicsDevice.Clear(bgColor);
 
-            spriteBatch.Begin(SpriteSortMode.Deferred, null, null, null, null, null, camera.GetViewMatrix());
+            spriteBatch.Begin(SpriteSortMode.Deferred, null, SamplerState.PointClamp, null, null, null, camera.GetViewMatrix());
 
             // Draw background info from TMX map.
-            map.Draw(spriteBatch, new Rectangle(0, 0, 420, 240));
+            map.Draw(spriteBatch, camera);
 
             // Draw all remaining drawables.
             foreach (var drawable in Drawables)
