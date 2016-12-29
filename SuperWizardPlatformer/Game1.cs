@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using SuperWizardPlatformer.Input;
 
 namespace SuperWizardPlatformer
 {
@@ -32,7 +33,7 @@ namespace SuperWizardPlatformer
         {
             resolution = new WindowModeAdjuster(graphics, Window);
 
-            InputMapper.Initialize();
+            ActionMapper.Initialize();
 
             IsMouseVisible = true;
             Window.AllowUserResizing = true;

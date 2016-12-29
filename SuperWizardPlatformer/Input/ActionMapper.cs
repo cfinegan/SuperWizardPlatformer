@@ -2,17 +2,25 @@
 using System;
 using System.Linq;
 
-namespace SuperWizardPlatformer
+namespace SuperWizardPlatformer.Input
 {
-    static class InputMapper
+    static class ActionMapper
     {
+        // Get the total number of actions for use as array bound.
         private static readonly int NUM_ACTIONS =
             Enum.GetValues(typeof(UserAction)).Cast<int>().Max() + 1;
 
+        // Each item in array should default to 'Keys.None' in both fields.
         private static KeyPair[] keyMappings = new KeyPair[NUM_ACTIONS];
 
+        // Each item in array should default to 'GamePadButtons.None'.
         private static GamePadButtons[] padMappings = new GamePadButtons[NUM_ACTIONS];
 
+        /// <summary>
+        /// Initializes the key/button mappings so that subsequent calls to IsPressed,
+        /// JustPressed, and JustReleased will return correct values. Otherwise, the
+        /// accessor methods will always return false.
+        /// </summary>
         public static void Initialize()
         {
             // Gameplay key mappings.
@@ -77,6 +85,9 @@ namespace SuperWizardPlatformer
                 GamePadStateTracker.JustReleased(padMappings[(int)action]);
         }
 
+        /// <summary>
+        /// Simple value type representing a pair of key values.
+        /// </summary>
         private struct KeyPair
         {
             public Keys first;

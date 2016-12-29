@@ -2,12 +2,10 @@
 using System;
 using System.Linq;
 
-namespace SuperWizardPlatformer
+namespace SuperWizardPlatformer.Input
 {
     /// <summary>
     /// Tracks the current and previous state of all keys recognizable by the framework.
-    /// This class may be used to query for the status of specific keys, and is also used by
-    /// InputMapper to translate key strokes into UserAction values.
     /// </summary>
     static class KeyStateTracker
     {

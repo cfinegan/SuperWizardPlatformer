@@ -1,11 +1,11 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Input;
 using FarseerPhysics.Dynamics;
 using MonoGame.Extended.TextureAtlases;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.Sprites;
 using FarseerPhysics;
+using SuperWizardPlatformer.Input;
 
 namespace SuperWizardPlatformer
 {
@@ -34,22 +34,22 @@ namespace SuperWizardPlatformer
             float xVel = 0, yVel = 0;
             float velFactor = 0.0025f;
 
-            if (InputMapper.IsPressed(UserAction.MoveLeft))
+            if (ActionMapper.IsPressed(UserAction.MoveLeft))
             {
                 xVel -= velFactor;
             }
 
-            if (InputMapper.IsPressed(UserAction.MoveRight))
+            if (ActionMapper.IsPressed(UserAction.MoveRight))
             {
                 xVel += velFactor;
             }
 
-            if (InputMapper.IsPressed(UserAction.Jump))
+            if (ActionMapper.IsPressed(UserAction.Jump))
             {
                 yVel -= velFactor * 5;
             }
 
-            if (InputMapper.IsPressed(UserAction.Duck))
+            if (ActionMapper.IsPressed(UserAction.Duck))
             {
                 yVel += velFactor * 5;
             }
