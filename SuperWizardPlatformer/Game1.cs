@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using SuperWizardPlatformer.Input;
+using MonoGame.Extended;
 
 namespace SuperWizardPlatformer
 {
@@ -11,11 +12,13 @@ namespace SuperWizardPlatformer
     /// </summary>
     public class Game1 : Game
     {
-        GraphicsDeviceManager graphics;
-        WindowModeAdjuster resolution;
-        RenderTarget2D renderTarget;
-        SpriteBatch spriteBatch;
-        IScene scene;
+        internal static Size InternalResolution { get; } = new Size(420, 240);
+
+        private GraphicsDeviceManager graphics;
+        private WindowModeAdjuster resolution;
+        private RenderTarget2D renderTarget;
+        private SpriteBatch spriteBatch;
+        private IScene scene;
 
         public Game1()
         {
@@ -44,8 +47,8 @@ namespace SuperWizardPlatformer
             // Render target is used to separate internal resolution from display resolution.
             renderTarget = new RenderTarget2D(
                 GraphicsDevice,
-                420,
-                240,
+                InternalResolution.Width,
+                InternalResolution.Height,
                 false,
                 GraphicsDevice.PresentationParameters.BackBufferFormat,
                 GraphicsDevice.PresentationParameters.DepthStencilFormat);

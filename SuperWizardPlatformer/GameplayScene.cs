@@ -12,7 +12,7 @@ namespace SuperWizardPlatformer
     class GameplayScene : IScene, IEntityContainer
     {
         private const int CAPACITY_DEFAULT = 32;
-        private const float GRAVITY_Y_DEFAULT = 9.8f;
+        private const float GRAVITY_DEFAULT = 9.8f;
 
         private Color bgColor = Color.Black;
 
@@ -50,7 +50,7 @@ namespace SuperWizardPlatformer
 
             camera = new GameplayCamera(game.GraphicsDevice, 
                 new Rectangle(0, 0, map.WidthInPixels, map.HeightInPixels),
-                new Size(420, 240));
+                Game1.InternalResolution);
 
             camera.Follow(Entities[2]);
         }
@@ -59,7 +59,7 @@ namespace SuperWizardPlatformer
 
         public List<IDrawable> Drawables { get; private set; } = new List<IDrawable>(CAPACITY_DEFAULT);
 
-        public World PhysicsWorld { get; private set; } = new World(new Vector2(0, GRAVITY_Y_DEFAULT));
+        public World PhysicsWorld { get; private set; } = new World(new Vector2(0, GRAVITY_DEFAULT));
 
         /// <summary>
         /// Indicates whether the scene is ready to exit and return control to the parent Game object.
