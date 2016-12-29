@@ -24,7 +24,6 @@ namespace SuperWizardPlatformer
     {
         private const float TRIGGER_DEADZONE = 0.0f;
         private const float STICK_DEADZONE = 0.0f;
-        private const int PAD_INDEX = 0;
 
         private static readonly int NUM_BUTTONS = 
             Enum.GetValues(typeof(GamePadButtons)).Cast<int>().Max() + 1;
@@ -39,7 +38,19 @@ namespace SuperWizardPlatformer
                 buttons[i].PressedThisFrame = false;
             }
 
-            var state = GamePad.GetState(PAD_INDEX);
+            for (int i = 0; i <= GamePad.MaximumGamePadCount; ++i)
+            {
+                var state = GamePad.GetState(i);
+
+                if (state.IsConnected)
+                {
+                    ApplyButtonStates(state);
+                }
+            }
+        }
+
+        private static void ApplyButtonStates(GamePadState state)
+        {
             var pressed = Microsoft.Xna.Framework.Input.ButtonState.Pressed;
 
             if (state.Buttons.A == pressed)

@@ -17,10 +17,9 @@ namespace SuperWizardPlatformer
         {
             // Gameplay key mappings.
             // TODO: Make configurable by user.
-            keyMappings[(int)UserAction.None] = KeyPair.Empty;
             keyMappings[(int)UserAction.MoveLeft] = new KeyPair(Keys.Left);
             keyMappings[(int)UserAction.MoveRight] = new KeyPair(Keys.Right);
-            keyMappings[(int)UserAction.Jump] = new KeyPair(Keys.Up);
+            keyMappings[(int)UserAction.Jump] = new KeyPair(Keys.Space, Keys.Up);
             keyMappings[(int)UserAction.Duck] = new KeyPair(Keys.Down);
 
             AddMenuKeyMappings();
@@ -78,7 +77,7 @@ namespace SuperWizardPlatformer
                 GamePadStateTracker.JustReleased(padMappings[(int)action]);
         }
 
-        public struct KeyPair
+        private struct KeyPair
         {
             public Keys first;
             public Keys second;
@@ -88,12 +87,6 @@ namespace SuperWizardPlatformer
                 this.first = first;
                 this.second = second;
             }
-
-            internal static readonly KeyPair Empty = new KeyPair
-            {
-                first = Keys.None,
-                second = Keys.None
-            };
         }
     }
 }

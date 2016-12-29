@@ -1,10 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using FarseerPhysics.Dynamics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Content;
 using MonoGame.Extended.Maps.Tiled;
-using FarseerPhysics.Dynamics;
+using MonoGame.Extended;
+using System;
+using System.Collections.Generic;
 
 namespace SuperWizardPlatformer
 {
@@ -47,7 +48,10 @@ namespace SuperWizardPlatformer
             MapBoundaryFactory.CreateAllBoundaries(PhysicsWorld, map);
             factory.PopulateScene(map);
 
-            camera = new GameplayCamera(game.GraphicsDevice);
+            camera = new GameplayCamera(game.GraphicsDevice, 
+                new Rectangle(0, 0, map.WidthInPixels, map.HeightInPixels),
+                new Size(420, 240));
+
             camera.Follow(Entities[2]);
         }
 
@@ -143,7 +147,7 @@ namespace SuperWizardPlatformer
             spriteBatch.Begin(SpriteSortMode.Deferred, null, null, null, null, null, camera.GetViewMatrix());
 
             // Draw background info from TMX map.
-            map.Draw(spriteBatch, new Rectangle(0, 0, 320, 240));
+            map.Draw(spriteBatch, new Rectangle(0, 0, 420, 240));
 
             // Draw all remaining drawables.
             foreach (var drawable in Drawables)

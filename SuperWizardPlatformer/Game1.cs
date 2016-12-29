@@ -43,7 +43,7 @@ namespace SuperWizardPlatformer
             // Render target is used to separate internal resolution from display resolution.
             renderTarget = new RenderTarget2D(
                 GraphicsDevice,
-                320,
+                420,
                 240,
                 false,
                 GraphicsDevice.PresentationParameters.BackBufferFormat,

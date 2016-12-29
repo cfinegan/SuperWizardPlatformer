@@ -20,8 +20,8 @@ namespace SuperWizardPlatformer
             this.graphics = graphics;
             this.window = window;
 
-            lastWindowWidth = 1024;
-            lastWindowHeight = 768;
+            lastWindowWidth = 840;
+            lastWindowHeight = 480;
 
             lastWindowPosition = new Point(
                 device.DisplayMode.Width / 2 - lastWindowWidth / 2,
