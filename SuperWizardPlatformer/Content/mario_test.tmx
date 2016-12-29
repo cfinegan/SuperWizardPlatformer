@@ -3,9 +3,6 @@
  <tileset firstgid="1" name="MarioTiles" tilewidth="16" tileheight="16" spacing="1" tilecount="132" columns="22">
   <image source="mario_tiles.png" width="374" height="102"/>
  </tileset>
- <tileset firstgid="133" name="MarioActors" tilewidth="16" tileheight="16" spacing="1" tilecount="646" columns="17">
-  <image source="mario_actors.gif" width="300" height="650"/>
- </tileset>
  <layer name="Tile Layer 1" width="40" height="30">
   <data encoding="csv">
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,

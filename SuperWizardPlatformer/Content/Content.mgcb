@@ -31,7 +31,7 @@
 /processor:TiledMapProcessor
 /build:mario_test.tmx
 
-#begin mario_actors.gif
+#begin mario_jump.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -41,5 +41,5 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:mario_actors.gif
+/build:mario_jump.png
 
