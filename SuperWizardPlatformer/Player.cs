@@ -1,11 +1,11 @@
-﻿using System;
-using Microsoft.Xna.Framework;
+﻿using FarseerPhysics;
 using FarseerPhysics.Dynamics;
-using MonoGame.Extended.TextureAtlases;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.Sprites;
-using FarseerPhysics;
+using MonoGame.Extended.TextureAtlases;
 using SuperWizardPlatformer.Input;
+using System;
 
 namespace SuperWizardPlatformer
 {
@@ -59,7 +59,11 @@ namespace SuperWizardPlatformer
 
         public void Draw(SpriteBatch spriteBatch)
         {
-            sprite.Position = ConvertUnits.ToDisplayUnits(Body.Position);
+            double posX = Math.Round(ConvertUnits.ToDisplayUnits(Body.Position.X));
+            double posY = Math.Round(ConvertUnits.ToDisplayUnits(Body.Position.Y));
+
+            sprite.Position = new Vector2((float)posX, (float)posY);
+            
             spriteBatch.Draw(sprite);
         }
     }

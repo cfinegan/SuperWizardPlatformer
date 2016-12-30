@@ -1,9 +1,8 @@
 ﻿using FarseerPhysics.Dynamics;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Content;
+using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.Maps.Tiled;
-using MonoGame.Extended;
 using System;
 using System.Collections.Generic;
 

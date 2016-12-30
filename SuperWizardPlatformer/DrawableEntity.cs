@@ -1,9 +1,9 @@
-﻿using System;
-using FarseerPhysics;
+﻿using FarseerPhysics;
 using FarseerPhysics.Dynamics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.TextureAtlases;
+using System;
 
 namespace SuperWizardPlatformer
 {
@@ -30,11 +30,10 @@ namespace SuperWizardPlatformer
         {
             if (IsVisible)
             {
-                var texturePos = new Vector2(
-                    Body.Position.X - halfSize.X, 
-                    Body.Position.Y - halfSize.Y);
+                double posX = Math.Round(ConvertUnits.ToDisplayUnits(Body.Position.X - halfSize.X));
+                double posY = Math.Round(ConvertUnits.ToDisplayUnits(Body.Position.Y - halfSize.Y));
 
-                spriteBatch.Draw(textureRegion, ConvertUnits.ToDisplayUnits(texturePos), Color.White);
+                spriteBatch.Draw(textureRegion, new Vector2((float)posX, (float)posY), Color.White);
             }
         }
     }
