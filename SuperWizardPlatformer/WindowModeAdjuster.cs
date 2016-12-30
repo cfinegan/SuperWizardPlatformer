@@ -24,15 +24,14 @@ namespace SuperWizardPlatformer
                     "Could not find GraphicsDeviceManager service in Game.");
             }            
 
-            lastWindowWidth = 840;
-            lastWindowHeight = 480;
+            lastWindowWidth = Game1.InternalResolution.Width * 2;
+            lastWindowHeight = Game1.InternalResolution.Height * 2;
 
             lastWindowPosition = new Point(
                 game.GraphicsDevice.DisplayMode.Width / 2 - lastWindowWidth / 2,
                 game.GraphicsDevice.DisplayMode.Height / 2 - lastWindowHeight / 2);
 
             game.Window.ClientSizeChanged += OnClientSizeChanged;
-
             game.Window.AllowUserResizing = true;
         }
 
