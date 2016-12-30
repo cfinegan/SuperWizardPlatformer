@@ -29,7 +29,11 @@ namespace SuperWizardPlatformer
         {
             if (toFollow != null)
             {
-                LookAt(ConvertUnits.ToDisplayUnits(toFollow.Body.Position));
+                // Make sure to round pixel values after converting from world units.
+                // Otherwise subtle camera bugs manifest (maybe library default is flooring them?).
+                double bodyPosX = Math.Round(ConvertUnits.ToDisplayUnits(toFollow.Body.Position.X));
+                double bodyPosY = Math.Round(ConvertUnits.ToDisplayUnits(toFollow.Body.Position.Y));
+                LookAt(new Vector2((float)bodyPosX, (float)bodyPosY));
 
                 float adjustX = 0;
                 float adjustY = 0;
