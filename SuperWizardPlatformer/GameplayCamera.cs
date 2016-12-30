@@ -40,7 +40,7 @@ namespace SuperWizardPlatformer
                 }
                 else if (Position.X + size.Width > boundingRect.X + boundingRect.Width)
                 {
-                    adjustX = boundingRect.X - Position.X + size.Width;
+                    adjustX = boundingRect.X + boundingRect.Width - (Position.X + size.Width);
                 }
                 
                 if (Position.Y < boundingRect.Y)
