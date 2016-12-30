@@ -12,7 +12,7 @@ namespace SuperWizardPlatformer
     /// </summary>
     public class Game1 : Game
     {
-        internal static Size InternalResolution { get; } = new Size(420, 240);
+        public static Size InternalResolution { get; } = new Size(420, 240);
 
         private GraphicsDeviceManager graphics;
         private WindowModeAdjuster resolution;
@@ -34,12 +34,9 @@ namespace SuperWizardPlatformer
         /// </summary>
         protected override void Initialize()
         {
-            resolution = new WindowModeAdjuster(graphics, Window);
+            Services.AddService(graphics);
 
-            ActionMapper.Initialize();
-
-            IsMouseVisible = true;
-            Window.AllowUserResizing = true;
+            resolution = new WindowModeAdjuster(this);
 
             // Load default screen configuration.
             EnableDefaultScreenProperties();
@@ -47,6 +44,8 @@ namespace SuperWizardPlatformer
             // Render target is used to separate internal resolution from display resolution.
             renderTarget = new RenderTarget2D(GraphicsDevice, 
                 InternalResolution.Width, InternalResolution.Height);
+
+            ActionMapper.Initialize();
 
             // Output some diagnostics before returning.
             Console.WriteLine("BackbufferWidth: {0}", graphics.PreferredBackBufferWidth);
