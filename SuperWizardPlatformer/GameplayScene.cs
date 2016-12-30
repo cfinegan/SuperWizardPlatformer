@@ -110,9 +110,9 @@ namespace SuperWizardPlatformer
             }
 
             // Update all remaining entities.
-            foreach (var entity in Entities)
+            for (int i = 0; i < Entities.Count; ++i)
             {
-                entity.Update(this, gameTime);
+                Entities[i].Update(this, gameTime);
             }
 
             // One step of the physics simulation forward
@@ -143,15 +143,16 @@ namespace SuperWizardPlatformer
 
             graphicsDevice.Clear(bgColor);
 
-            spriteBatch.Begin(SpriteSortMode.Deferred, null, SamplerState.PointClamp, null, null, null, camera.GetViewMatrix());
+            spriteBatch.Begin(SpriteSortMode.Deferred, null, SamplerState.PointClamp, 
+                null, null, null, camera.GetViewMatrix());
 
             // Draw background info from TMX map.
             map.Draw(spriteBatch, camera);
 
             // Draw all remaining drawables.
-            foreach (var drawable in Drawables)
+            for (int i = 0; i < Drawables.Count; ++i)
             {
-                drawable.Draw(spriteBatch);
+                Drawables[i].Draw(spriteBatch);
             }
 
             spriteBatch.End();
