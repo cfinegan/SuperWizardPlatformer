@@ -1,5 +1,6 @@
 ﻿using FarseerPhysics.Dynamics;
 using FarseerPhysics.Dynamics.Contacts;
+using System.Diagnostics;
 
 namespace SuperWizardPlatformer
 {
@@ -7,12 +8,11 @@ namespace SuperWizardPlatformer
     {
         public static bool OnCollision(Fixture A, Fixture B, Contact contact)
         {
-            IEntity userDataA = A.Body.UserData != null ? A.Body.UserData as IEntity : null;
-            IEntity userDataB = B.Body.UserData != null ? B.Body.UserData as IEntity : null;
+            Debug.Assert(A.Body.UserData != null);
 
-            if (userDataA != null && userDataB != null)
+            if (A.Body.UserData != null && B.Body.UserData != null)
             {
-                return userDataA.OnCollision(userDataB) && userDataB.OnCollision(userDataA);
+                return ((IEntity)A.Body.UserData).OnCollision((IEntity)B.Body.UserData);
             }
 
             return true;
