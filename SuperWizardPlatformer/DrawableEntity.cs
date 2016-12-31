@@ -36,5 +36,10 @@ namespace SuperWizardPlatformer
                 spriteBatch.Draw(textureRegion, new Vector2((float)posX, (float)posY), Color.White);
             }
         }
+
+        public override bool OnCollision(IEntity other)
+        {
+            return true;
+        }
     }
 }

@@ -1,6 +1,6 @@
-﻿using System;
-using FarseerPhysics.Dynamics;
+﻿using FarseerPhysics.Dynamics;
 using Microsoft.Xna.Framework;
+using System;
 
 namespace SuperWizardPlatformer
 {
@@ -22,5 +22,7 @@ namespace SuperWizardPlatformer
         public bool IsVisible { get; set; }
 
         public abstract void Update(IScene scene, GameTime gameTime);
+
+        public abstract bool OnCollision(IEntity other);
     }
 }

@@ -12,5 +12,7 @@ namespace SuperWizardPlatformer
         bool IsVisible { get; set; }
 
         void Update(IScene scene, GameTime gameTime);
+
+        bool OnCollision(IEntity other);
     }
 }

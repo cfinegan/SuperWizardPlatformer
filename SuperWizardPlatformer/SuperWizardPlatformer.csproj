@@ -53,6 +53,7 @@
     <ApplicationIcon>Icon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="ContactListener.cs" />
     <Compile Include="DrawableEntity.cs" />
     <Compile Include="Entity.cs" />
     <Compile Include="Input\GamePadButtons.cs" />

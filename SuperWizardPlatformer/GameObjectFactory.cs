@@ -38,6 +38,7 @@ namespace SuperWizardPlatformer
             body.BodyType = BodyType.Dynamic;
             body.FixedRotation = true;
             body.Position = ConvertUnits.ToSimUnits(position);
+            body.OnCollision += ContactListener.OnCollision;
 
             Player player = new Player(body, textureRegion);
 
@@ -113,6 +114,7 @@ namespace SuperWizardPlatformer
                                 }
 
                                 body.FixedRotation = true;
+                                body.OnCollision += ContactListener.OnCollision;
 
                                 var entity = new DrawableEntity(body, new Vector2(bodyWidth, bodyHeight), map.GetTileRegion((int)obj.Gid));
 

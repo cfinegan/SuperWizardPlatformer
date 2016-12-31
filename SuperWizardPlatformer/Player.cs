@@ -1,5 +1,6 @@
 ﻿using FarseerPhysics;
 using FarseerPhysics.Dynamics;
+using FarseerPhysics.Dynamics.Contacts;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.Sprites;
@@ -65,6 +66,12 @@ namespace SuperWizardPlatformer
             sprite.Position = new Vector2((float)posX, (float)posY);
             
             spriteBatch.Draw(sprite);
+        }
+
+        public bool OnCollision(IEntity other)
+        {
+            other.IsMarkedForRemoval = true;
+            return false;
         }
     }
 }

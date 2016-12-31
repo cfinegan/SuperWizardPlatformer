@@ -102,7 +102,7 @@ namespace SuperWizardPlatformer
                     Entities[Entities.Count - 1] = tmp;
 
                     // Remove body entity from physics sim before removing from entities list.
-                    PhysicsWorld.RemoveBody(Entities[Entities.Count].Body);
+                    PhysicsWorld.RemoveBody(Entities[Entities.Count - 1].Body);
                     Entities.RemoveAt(Entities.Count - 1);
                     --i;
                 }
