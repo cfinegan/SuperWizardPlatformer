@@ -1,9 +1,10 @@
-﻿using System;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using SuperWizardPlatformer.Input;
 using MonoGame.Extended;
+using SuperWizardPlatformer.Input;
+using System;
+using System.Diagnostics;
 
 namespace SuperWizardPlatformer
 {
@@ -97,6 +98,10 @@ namespace SuperWizardPlatformer
             if (KeyStateTracker.IsAltEnterJustPressed)
             {
                 resolution.ToggleBorderlessFullscreen();
+            }
+            if (Debugger.IsAttached && !graphics.IsFullScreen && KeyStateTracker.JustPressed(Keys.F5))
+            {
+                Debugger.Break();
             }
 
             scene.Update(gameTime);

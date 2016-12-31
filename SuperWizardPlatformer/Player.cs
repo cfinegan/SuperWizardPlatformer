@@ -12,6 +12,8 @@ namespace SuperWizardPlatformer
 {
     class Player : IEntity, IDrawable
     {
+        public static float Density { get; } = 1.0f;
+
         private Sprite sprite;
 
         public Player(Body body, TextureRegion2D textureRegion)
@@ -32,6 +34,8 @@ namespace SuperWizardPlatformer
 
         public void Update(IScene scene, GameTime gameTime)
         {
+            Console.WriteLine("Player pos: {0}", ConvertUnits.ToDisplayUnits(Body.Position));
+
             float xVel = 0, yVel = 0;
             float velFactor = 0.0025f;
 

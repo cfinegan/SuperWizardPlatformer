@@ -14,6 +14,7 @@ namespace SuperWizardPlatformer
         private const float GRAVITY_DEFAULT = 9.8f;
 
         private Color bgColor = Color.Black;
+        private Player player = null;
 
         private ContentManager content;
         private TiledMap map;
@@ -45,13 +46,32 @@ namespace SuperWizardPlatformer
             }
 
             MapBoundaryFactory.CreateAllBoundaries(PhysicsWorld, map);
+
             factory.PopulateScene(map);
+
+            foreach (var entity in factory.AllocatedEntities)
+            {
+                Entities.Add(entity);
+
+                var playerCheck = entity as Player;
+                if (playerCheck != null)
+                {
+                    if (player == null) { player = playerCheck; }
+                    else { throw new Exception("Map cannot have more than one player."); }
+                }
+
+                var drawableCheck = entity as IDrawable;
+                if (drawableCheck != null)
+                {
+                    Drawables.Add(drawableCheck);
+                }                
+            }
 
             camera = new GameplayCamera(game.GraphicsDevice, 
                 new Rectangle(0, 0, map.WidthInPixels, map.HeightInPixels),
                 Game1.InternalResolution);
 
-            camera.Follow(Entities[2]);
+            camera.Follow(player);
         }
 
         public List<IEntity> Entities { get; private set; } = new List<IEntity>(CAPACITY_DEFAULT);
@@ -109,9 +129,9 @@ namespace SuperWizardPlatformer
             }
 
             // Update all remaining entities.
-            for (int i = 0; i < Entities.Count; ++i)
+            foreach (var entity in Entities)
             {
-                Entities[i].Update(this, gameTime);
+                entity.Update(this, gameTime);
             }
 
             // One step of the physics simulation forward
@@ -149,9 +169,9 @@ namespace SuperWizardPlatformer
             map.Draw(spriteBatch, camera);
 
             // Draw all remaining drawables.
-            for (int i = 0; i < Drawables.Count; ++i)
+            foreach (var drawable in Drawables)
             {
-                Drawables[i].Draw(spriteBatch);
+                drawable.Draw(spriteBatch);
             }
 
             spriteBatch.End();
