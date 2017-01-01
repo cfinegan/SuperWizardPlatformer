@@ -1,6 +1,5 @@
 ﻿using FarseerPhysics;
 using FarseerPhysics.Dynamics;
-using FarseerPhysics.Dynamics.Contacts;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.Sprites;
@@ -34,8 +33,6 @@ namespace SuperWizardPlatformer
 
         public void Update(IScene scene, GameTime gameTime)
         {
-            Console.WriteLine("Player pos: {0}", ConvertUnits.ToDisplayUnits(Body.Position));
-
             float xVel = 0, yVel = 0;
             float velFactor = 0.0025f;
 

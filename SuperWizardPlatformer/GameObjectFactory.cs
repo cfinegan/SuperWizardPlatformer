@@ -60,14 +60,11 @@ namespace SuperWizardPlatformer
             float bodyWidth = ConvertUnits.ToSimUnits(textureRegion.Width);
             float bodyHeight = ConvertUnits.ToSimUnits(textureRegion.Height);
 
-            Console.WriteLine("Player X/Y: ({0}, {1})", obj.X, obj.Y);
-
             var body = BodyFactory.CreateRectangle(
                 physicsWorld, bodyWidth, bodyHeight, Player.Density);
 
             body.BodyType = BodyType.Dynamic;
             body.Position = ConvertUnits.ToSimUnits(new Vector2(obj.X, obj.Y));
-            Console.WriteLine("Converts to: {0}", body.Position);
             SetBodyProperties(body);
 
             AllocatedEntities.Add(new Player(body, textureRegion));
@@ -97,7 +94,7 @@ namespace SuperWizardPlatformer
         private void CreateRectangle(TiledObject obj)
         {
             float rectWidth = ConvertUnits.ToSimUnits(obj.Width);
-            float rectHeight = Convert.ToSingle(obj.Height);
+            float rectHeight = ConvertUnits.ToSimUnits(obj.Height);
 
             var body = BodyFactory.CreateRectangle(
                 physicsWorld, rectWidth, rectHeight, GetDensity(obj));
@@ -108,6 +105,7 @@ namespace SuperWizardPlatformer
                 obj.Y + obj.Height / 2.0f));
 
             body.Position = bodyCenter;
+            body.FixedRotation = true;
             body.BodyType = BodyType.Static;
         }
 
