@@ -34,7 +34,7 @@ namespace SuperWizardPlatformer
             {
                 foreach (var obj in objGroup.Objects)
                 {
-                    if (obj.Type.ToLower().Equals("player"))
+                    if ("player".Equals(obj.Type, StringComparison.OrdinalIgnoreCase))
                     {
                         CreatePlayer(obj, map.GetTileRegion((int)obj.Gid));
                     }
