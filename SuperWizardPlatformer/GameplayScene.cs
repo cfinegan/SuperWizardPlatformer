@@ -12,10 +12,10 @@ namespace SuperWizardPlatformer
     {
         private const int CAPACITY_DEFAULT = 32;
         private const float GRAVITY_DEFAULT = 9.8f;
+        private static readonly Color BGCOLOR_DEFAULT = Color.Black;
 
-        private Color bgColor = Color.Black;
         private Player player = null;
-
+        private Color bgColor;
         private ContentManager content;
         private TiledMap map;
         private SpriteBatch spriteBatch;
@@ -29,6 +29,9 @@ namespace SuperWizardPlatformer
         /// <param name="mapName">URI indicating the name of the Tiled .TMX resource to load.</param>
         public GameplayScene(Game game, string mapName)
         {
+            var logLoadBanner = string.Format("====== Loading TMX map '{0}' ======", mapName);
+            Console.WriteLine(logLoadBanner);
+
             if (game == null) { throw new ArgumentNullException(nameof(game)); }
             if (string.IsNullOrWhiteSpace(mapName))
             {
@@ -40,10 +43,8 @@ namespace SuperWizardPlatformer
             spriteBatch = new SpriteBatch(game.GraphicsDevice);
             factory = new GameObjectFactory(this);
 
-            if (map.BackgroundColor != null)
-            {
-                bgColor = (Color)map.BackgroundColor;
-            }
+            Console.WriteLine("{0}: {1}", nameof(map.BackgroundColor), map.BackgroundColor);
+            bgColor = map.BackgroundColor ?? BGCOLOR_DEFAULT;
 
             MapBoundaryFactory.CreateAllBoundaries(PhysicsWorld, map);
 
@@ -77,6 +78,10 @@ namespace SuperWizardPlatformer
                 Game1.InternalResolution);
 
             camera.Follow(player);
+
+            Console.WriteLine("Load successful.");
+            for (int i = 0; i < logLoadBanner.Length; ++i) { Console.Write('='); }
+            Console.WriteLine();
         }
 
         public List<IEntity> Entities { get; private set; } = new List<IEntity>(CAPACITY_DEFAULT);
