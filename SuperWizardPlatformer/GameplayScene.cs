@@ -56,8 +56,13 @@ namespace SuperWizardPlatformer
                 var playerCheck = entity as Player;
                 if (playerCheck != null)
                 {
-                    if (player == null) { player = playerCheck; }
-                    else { throw new Exception("Map cannot have more than one player."); }
+                    if (player != null)
+                    {
+                        throw new InvalidOperationException(
+                            "A scene cannot have more than one player.");
+                    }
+
+                    player = playerCheck;
                 }
 
                 var drawableCheck = entity as IDrawable;
