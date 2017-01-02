@@ -12,21 +12,11 @@ namespace SuperWizardPlatformer
     /// </summary>
     public static class Program
     {
-
-        // assign a string indicating debug/release mode for logger.
-        const string debugMode =
-#if DEBUG
-        "DEBUG"
-#else
-        "RELEASE"
-#endif
-            ;
-
         /// <summary>
         /// The main entry point for the application.
         /// </summary>
         [STAThread]
-        static void Main()
+        private static void Main()
         {
             StreamWriter logFile = null;
 
@@ -51,12 +41,12 @@ namespace SuperWizardPlatformer
                 GCSettings.LatencyMode = GCLatencyMode.SustainedLowLatency;
 
                 // Write start-of-process info to log.
-                Console.WriteLine("SuperWizardPlatformer v0.1 {0}", debugMode);
+                Console.WriteLine("SuperWizardPlatformer v0.1 {0}", DebugMode);
                 Console.WriteLine("Running {0}-bit process on {1}-bit system",
                     Environment.Is64BitProcess ? 64 : 32,
                     Environment.Is64BitOperatingSystem ? 64 : 32);
                 Console.WriteLine("GCLatencyMode: {0}", GCSettings.LatencyMode);
-                Console.WriteLine("{0}: {1}", nameof(GamePad.MaximumGamePadCount), 
+                Console.WriteLine("{0}: {1}", nameof(GamePad.MaximumGamePadCount),
                     GamePad.MaximumGamePadCount);
                 Console.WriteLine("Number of key codes: {0}", KeyStateTracker.NumKeys);
 
@@ -77,6 +67,21 @@ namespace SuperWizardPlatformer
                 }
             }
         }
+
+        /// <summary>
+        /// String indicating whether the program was compiled in Debug or Release mode.
+        /// </summary>
+        private static string DebugMode
+        {
+            get
+            {
+#if DEBUG
+                return "DEBUG";
+#else
+                return "RELEASE";
+#endif
+            }
+        }
     }
 #endif
-    }
+}
