@@ -2,6 +2,10 @@
 
 namespace SuperWizardPlatformer
 {
+    /// <summary>
+    /// The exception that is thrown when invalid data is read from a description of an IScene.
+    /// </summary>
+    /// <seealso cref="IScene"/>
     class InvalidSceneDataException : ArgumentException
     {
         private const string DEFAULT_MESSAGE = "Invalid scene data.";

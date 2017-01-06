@@ -61,12 +61,6 @@ namespace SuperWizardPlatformer
                 var playerCheck = entity as Player;
                 if (playerCheck != null)
                 {
-                    if (player != null)
-                    {
-                        throw new InvalidSceneDataException(
-                            "Cannot have more than one player.", nameof(map));
-                    }
-
                     player = playerCheck;
                 }
 
@@ -75,12 +69,6 @@ namespace SuperWizardPlatformer
                 {
                     Drawables.Add(drawableCheck);
                 }
-            }
-
-            if (player == null)
-            {
-                throw new InvalidSceneDataException(
-                    "'Player' entity not specified.", nameof(map));
             }
 
             // Allocate and assign camera.

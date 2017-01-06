@@ -35,6 +35,10 @@ namespace SuperWizardPlatformer
 
         public List<IEntity> PopulateScene(TiledMap map)
         {
+            if (map == null) { throw new ArgumentNullException(nameof(map)); }
+
+            bool playerFound = false;
+
             foreach (var objGroup in map.ObjectGroups)
             {
                 foreach (var obj in objGroup.Objects)
@@ -43,8 +47,17 @@ namespace SuperWizardPlatformer
 
                     if ("player".Equals(obj.Type, StringComparison.OrdinalIgnoreCase))
                     {
-                        allocatedEntities.Add(new Player(
-                            physicsWorld, obj, map.GetTileRegion((int)obj.Gid)));
+                        if (!playerFound)
+                        {
+                            allocatedEntities.Add(new Player(
+                                physicsWorld, obj, map.GetTileRegion((int)obj.Gid)));
+                            playerFound = true;
+                        }
+                        else
+                        {
+                            throw new InvalidSceneDataException(
+                                "Cannot have more than one player.", nameof(map));
+                        }
                     }
                     else if (obj.ObjectType == TiledObjectType.Tile)
                     {
@@ -61,6 +74,11 @@ namespace SuperWizardPlatformer
                             GetType().Name, obj.ObjectType);
                     }
                 }
+            }
+
+            if (!playerFound)
+            {
+                throw new InvalidSceneDataException("Must specify player object.", nameof(map));
             }
 
             return allocatedEntities;
