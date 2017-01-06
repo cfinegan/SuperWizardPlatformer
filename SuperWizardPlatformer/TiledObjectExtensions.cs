@@ -87,7 +87,7 @@ namespace SuperWizardPlatformer
             }
             else if (!string.IsNullOrWhiteSpace(physics))
             {
-                Console.Write("[{0}] ", nameof(GameObjectFactory));
+                Console.Write("[{0}] ", nameof(EntityAllocator));
                 Console.WriteLine("Unrecognized physics value '{0}' for object '{2}'.",
                     physics, obj.Name);
             }

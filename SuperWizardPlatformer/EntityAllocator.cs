@@ -12,13 +12,13 @@ namespace SuperWizardPlatformer
     /// Allocates Entities and tracks how many have been allocated total, so that the scene knows
     /// how large to keep its buffers in case all entities are active at once.
     /// </summary>
-    class GameObjectFactory
+    class EntityAllocator
     {
         private World physicsWorld;
 
         private List<IEntity> allocatedEntities = new List<IEntity>();
 
-        public GameObjectFactory(World physicsWorld)
+        public EntityAllocator(World physicsWorld)
         {
             if (physicsWorld == null) { throw new ArgumentNullException(nameof(physicsWorld)); }
             

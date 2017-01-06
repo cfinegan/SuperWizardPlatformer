@@ -61,7 +61,7 @@
     <Compile Include="GameplayCamera.cs" />
     <Compile Include="IEntityContainer.cs" />
     <Compile Include="Game1.cs" />
-    <Compile Include="GameObjectFactory.cs" />
+    <Compile Include="EntityAllocator.cs" />
     <Compile Include="GameplayScene.cs" />
     <Compile Include="IDrawable.cs" />
     <Compile Include="IEntity.cs" />
