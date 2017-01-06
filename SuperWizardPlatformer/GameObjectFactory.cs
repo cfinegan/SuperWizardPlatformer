@@ -32,6 +32,8 @@ namespace SuperWizardPlatformer
             {
                 foreach (var obj in objGroup.Objects)
                 {
+                    Console.Write(obj.GetLoggerInfo());
+
                     if ("player".Equals(obj.Type, StringComparison.OrdinalIgnoreCase))
                     {
                         AllocatedEntities.Add(new Player(
