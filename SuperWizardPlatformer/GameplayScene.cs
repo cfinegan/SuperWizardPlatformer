@@ -70,7 +70,7 @@ namespace SuperWizardPlatformer
                 if (drawableCheck != null)
                 {
                     Drawables.Add(drawableCheck);
-                }                
+                }
             }
 
             camera = new GameplayCamera(game.GraphicsDevice, 

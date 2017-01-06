@@ -4,7 +4,6 @@ using FarseerPhysics.Factories;
 using Microsoft.Xna.Framework;
 using MonoGame.Extended.Maps.Tiled;
 using System;
-using System.Diagnostics;
 
 namespace SuperWizardPlatformer
 {

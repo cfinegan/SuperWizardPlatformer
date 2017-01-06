@@ -53,7 +53,7 @@ namespace SuperWizardPlatformer
             obj.Properties.TryGetValue("density", out strDensity);
             float value = 1.0f;
             float.TryParse(strDensity, out value);
-            return value;
+            return value != 0 ? value : 1.0f;
         }
 
         /// <summary>

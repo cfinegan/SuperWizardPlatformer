@@ -30,7 +30,7 @@ namespace SuperWizardPlatformer
             return; // Do nothing by default.
         }
 
-        public void Draw(SpriteBatch spriteBatch)
+        public virtual void Draw(SpriteBatch spriteBatch)
         {
             if (IsVisible)
             {
