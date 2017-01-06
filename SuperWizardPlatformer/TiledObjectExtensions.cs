@@ -3,7 +3,6 @@ using FarseerPhysics.Dynamics;
 using Microsoft.Xna.Framework;
 using MonoGame.Extended.Maps.Tiled;
 using System;
-using System.Text;
 
 namespace SuperWizardPlatformer
 {
@@ -94,35 +93,6 @@ namespace SuperWizardPlatformer
             }
 
             return result;
-        }
-
-        /// <summary>
-        /// Gets a string which contains any information about this TiledObject which should be logged.
-        /// </summary>
-        /// <param name="obj">The invoking TiledObject.</param>
-        /// <returns>A string containing diagnostic information.</returns>
-        public static string GetLoggerInfo(this TiledObject obj)
-        {
-            var desc = new StringBuilder();
-            
-            if (!string.IsNullOrWhiteSpace(obj.Name)) { desc.AppendFormat("'{0}' | ", obj.Name); }
-
-            desc.AppendFormat("ObjectType: {0} | ", obj.ObjectType);
-
-            if (!string.IsNullOrWhiteSpace(obj.Type)) { desc.AppendFormat("Type: {0} | ", obj.Type); }
-
-            desc.AppendFormat("Width: {0} | Height: {1} | Rotation: {2} | Visible: {3}", 
-                obj.Width, obj.Height, obj.Rotation, obj.IsVisible);
-
-            desc.AppendLine();
-
-            foreach (var entry in obj.Properties)
-            {
-                var line = string.Format("\t{0}: {1}", entry.Key, entry.Value);
-                desc.AppendLine(line);
-            }
-
-            return desc.ToString();
         }
     }
 }
