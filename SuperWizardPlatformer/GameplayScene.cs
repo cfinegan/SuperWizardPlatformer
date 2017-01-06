@@ -59,8 +59,7 @@ namespace SuperWizardPlatformer
                 {
                     if (player != null)
                     {
-                        throw new InvalidOperationException(
-                            "A scene cannot have more than one player.");
+                        throw new InvalidOperationException("Cannot have more than one player.");
                     }
 
                     player = playerCheck;
@@ -71,6 +70,11 @@ namespace SuperWizardPlatformer
                 {
                     Drawables.Add(drawableCheck);
                 }
+            }
+
+            if (player == null)
+            {
+                throw new InvalidOperationException("'Player' entity not specified.");
             }
 
             camera = new GameplayCamera(game.GraphicsDevice, 
