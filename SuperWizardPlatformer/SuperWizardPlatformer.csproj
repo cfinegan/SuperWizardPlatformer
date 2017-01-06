@@ -67,6 +67,7 @@
     <Compile Include="IEntity.cs" />
     <Compile Include="Input\ActionMapper.cs" />
     <Compile Include="Input\KeyStateTracker.cs" />
+    <Compile Include="InvalidSceneDataException.cs" />
     <Compile Include="IScene.cs" />
     <Compile Include="MapBoundaryFactory.cs" />
     <Compile Include="Player.cs" />

@@ -63,7 +63,8 @@ namespace SuperWizardPlatformer
                 {
                     if (player != null)
                     {
-                        throw new InvalidOperationException("Cannot have more than one player.");
+                        throw new InvalidSceneDataException(
+                            "Cannot have more than one player.", nameof(map));
                     }
 
                     player = playerCheck;
@@ -78,7 +79,8 @@ namespace SuperWizardPlatformer
 
             if (player == null)
             {
-                throw new InvalidOperationException("'Player' entity not specified.");
+                throw new InvalidSceneDataException(
+                    "'Player' entity not specified.", nameof(map));
             }
 
             // Allocate and assign camera.
