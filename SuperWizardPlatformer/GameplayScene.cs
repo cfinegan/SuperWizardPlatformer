@@ -8,19 +8,22 @@ using System.Collections.Generic;
 
 namespace SuperWizardPlatformer
 {
-    class GameplayScene : IScene, IEntityContainer
+    class GameplayScene : IScene
     {
         private const int CAPACITY_DEFAULT = 32;
         private const float GRAVITY_DEFAULT = 9.8f;
         private static readonly Color BGCOLOR_DEFAULT = Color.Black;
 
-        private Player player = null;
+        private World physicsWorld = new World(new Vector2(0, GRAVITY_DEFAULT));
+        private List<IEntity> entities;
+        private List<IDrawable> drawables;
         private Color bgColor;
         private ContentManager content;
         private TiledMap map;
         private SpriteBatch spriteBatch;
         private EntityAllocator factory;
         private GameplayCamera camera;
+        private Player player;
 
         /// <summary>
         /// Constructs a new scene.
@@ -44,31 +47,21 @@ namespace SuperWizardPlatformer
             content = new ContentManager(game.Services, game.Content.RootDirectory);
             map = content.Load<TiledMap>(mapName);
             spriteBatch = new SpriteBatch(game.GraphicsDevice);
-            factory = new EntityAllocator(PhysicsWorld);
+            factory = new EntityAllocator(physicsWorld);
             bgColor = map.BackgroundColor ?? BGCOLOR_DEFAULT;
 
-            Console.WriteLine("{0}: {1}", nameof(map.BackgroundColor), map.BackgroundColor);
+            Console.WriteLine("Background Color: {0}", map.BackgroundColor);
 
-            MapBoundaryFactory.CreateAllBoundaries(PhysicsWorld, map);
+            MapBoundaryFactory.CreateAllBoundaries(physicsWorld, map);
+
+            var activeEntities = factory.PopulateScene(map);
+            entities = new List<IEntity>(factory.EntityCount);
+            drawables = new List<IDrawable>(factory.EntityCount);
 
             // Allocate and sort entities.
-            var entities = factory.PopulateScene(map);
-
-            foreach (var entity in entities)
-            {
-                Entities.Add(entity);
-
-                var playerCheck = entity as Player;
-                if (playerCheck != null)
-                {
-                    player = playerCheck;
-                }
-
-                var drawableCheck = entity as IDrawable;
-                if (drawableCheck != null)
-                {
-                    Drawables.Add(drawableCheck);
-                }
+            foreach (var entity in activeEntities)
+            { 
+                AddEntity(entity);
             }
 
             // Allocate and assign camera.
@@ -84,35 +77,24 @@ namespace SuperWizardPlatformer
             Console.WriteLine();
         }
 
-        public List<IEntity> Entities { get; private set; } = new List<IEntity>(CAPACITY_DEFAULT);
-
-        public List<IDrawable> Drawables { get; private set; } = new List<IDrawable>(CAPACITY_DEFAULT);
-
-        public World PhysicsWorld { get; private set; } = new World(new Vector2(0, GRAVITY_DEFAULT));
-
-        /// <summary>
-        /// Indicates whether the scene is ready to exit and return control to the parent Game object.
-        /// </summary>
         public bool IsReadyToQuit { get; private set; } = false;
 
-        /// <summary>
-        /// Indicates whether this IDisposable has been disposed.
-        /// </summary>
         public bool IsDisposed { get; private set; } = false;
 
-        /// <summary>
-        /// Halts the physics simulation and disposes of all unmanaged scene resources (textures, audio, etc).
-        /// </summary>
-        public void Dispose()
+        public void AddEntity(IEntity entity)
         {
-            if (!IsDisposed)
-            {
-                PhysicsWorld.ClearForces();
-                PhysicsWorld.Clear();
-                content.Dispose();
-                spriteBatch.Dispose();
+            entities.Add(entity);
 
-                IsDisposed = true;
+            var drawableCheck = entity as IDrawable;
+            if (drawableCheck != null)
+            {
+                drawables.Add(drawableCheck);
+            }
+
+            var playerCheck = entity as Player;
+            if (playerCheck != null)
+            {
+                player = playerCheck;
             }
         }
 
@@ -123,30 +105,30 @@ namespace SuperWizardPlatformer
         public void Update(GameTime gameTime)
         {
             // Delete entities that have been marked for removal from the scene.
-            for (int i = 0; i < Entities.Count; ++i)
+            for (int i = 0; i < entities.Count; ++i)
             {
-                if (Entities[i].IsMarkedForRemoval)
+                if (entities[i].IsMarkedForRemoval)
                 {
-                    var tmp = Entities[i];
-                    Entities[i] = Entities[Entities.Count - 1];
-                    Entities[Entities.Count - 1] = tmp;
+                    var tmp = entities[i];
+                    entities[i] = entities[entities.Count - 1];
+                    entities[entities.Count - 1] = tmp;
 
                     // Remove body entity from physics sim before removing from entities list.
-                    Entities[Entities.Count - 1].Body.Enabled = false;
-                    Entities.RemoveAt(Entities.Count - 1);
+                    entities[entities.Count - 1].Body.Enabled = false;
+                    entities.RemoveAt(entities.Count - 1);
                     --i;
                 }
             }
 
             // Update all remaining entities.
-            foreach (var entity in Entities)
+            foreach (var entity in entities)
             {
                 entity.Update(this, gameTime);
             }
 
             // One step of the physics simulation forward
             // TODO: Assuming 60 hz might not be best thing long term?
-            PhysicsWorld.Step(1.0f / 60.0f);
+            physicsWorld.Step(1.0f / 60.0f);
         }
 
         /// <summary>
@@ -159,14 +141,14 @@ namespace SuperWizardPlatformer
             camera.UpdatePosition();
 
             // Delete drawables that have been marked for removal from the scene.
-            for (int i = 0; i < Drawables.Count; ++i)
+            for (int i = 0; i < drawables.Count; ++i)
             {
-                if (Drawables[i].IsMarkedForRemoval)
+                if (drawables[i].IsMarkedForRemoval)
                 {
-                    var tmp = Drawables[i];
-                    Drawables[i] = Drawables[Drawables.Count - 1];
-                    Drawables[Drawables.Count - 1] = tmp;
-                    Drawables.RemoveAt(Drawables.Count - 1);
+                    var tmp = drawables[i];
+                    drawables[i] = drawables[drawables.Count - 1];
+                    drawables[drawables.Count - 1] = tmp;
+                    drawables.RemoveAt(drawables.Count - 1);
                     --i;
                 }
             }
@@ -180,12 +162,25 @@ namespace SuperWizardPlatformer
             map.Draw(spriteBatch, camera);
 
             // Draw all remaining drawables.
-            foreach (var drawable in Drawables)
+            foreach (var drawable in drawables)
             {
                 drawable.Draw(spriteBatch);
             }
 
             spriteBatch.End();
+        }
+
+        public void Dispose()
+        {
+            if (!IsDisposed)
+            {
+                physicsWorld.ClearForces();
+                physicsWorld.Clear();
+                content.Dispose();
+                spriteBatch.Dispose();
+
+                IsDisposed = true;
+            }
         }
     }
 }

@@ -29,7 +29,7 @@ namespace SuperWizardPlatformer
         {
             get
             {
-                throw new NotImplementedException();
+                return allocatedEntities.Count;
             }
         }
 
