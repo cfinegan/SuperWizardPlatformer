@@ -50,10 +50,15 @@ namespace SuperWizardPlatformer
         public static float GetDensity(this TiledObject obj)
         {
             string strDensity = string.Empty;
-            obj.Properties.TryGetValue("density", out strDensity);
             float value = 1.0f;
-            float.TryParse(strDensity, out value);
-            return value != 0 ? value : 1.0f;
+            obj.Properties.TryGetValue("density", out strDensity);
+
+            if (!string.IsNullOrWhiteSpace(strDensity))
+            {
+                float.TryParse(strDensity, out value);
+            }
+
+            return value;
         }
 
         /// <summary>
