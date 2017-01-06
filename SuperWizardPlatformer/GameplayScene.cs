@@ -29,28 +29,32 @@ namespace SuperWizardPlatformer
         /// <param name="mapName">URI indicating the name of the Tiled .TMX resource to load.</param>
         public GameplayScene(Game game, string mapName)
         {
+            // Log start-of-load message.
             var logLoadBanner = string.Format("====== Loading TMX map '{0}' ======", mapName);
             Console.WriteLine(logLoadBanner);
 
+            // Check arguments for null.
             if (game == null) { throw new ArgumentNullException(nameof(game)); }
             if (string.IsNullOrWhiteSpace(mapName))
             {
                 throw new ArgumentNullException(nameof(mapName));
             }
 
+            // Instantiate member objects.
             content = new ContentManager(game.Services, game.Content.RootDirectory);
             map = content.Load<TiledMap>(mapName);
             spriteBatch = new SpriteBatch(game.GraphicsDevice);
-            factory = new GameObjectFactory(this);
+            factory = new GameObjectFactory(PhysicsWorld);
+            bgColor = map.BackgroundColor ?? BGCOLOR_DEFAULT;
 
             Console.WriteLine("{0}: {1}", nameof(map.BackgroundColor), map.BackgroundColor);
-            bgColor = map.BackgroundColor ?? BGCOLOR_DEFAULT;
 
             MapBoundaryFactory.CreateAllBoundaries(PhysicsWorld, map);
 
-            factory.PopulateScene(map);
+            // Allocate and sort entities.
+            var entities = factory.PopulateScene(map);
 
-            foreach (var entity in factory.AllocatedEntities)
+            foreach (var entity in entities)
             {
                 Entities.Add(entity);
 
@@ -77,12 +81,14 @@ namespace SuperWizardPlatformer
                 throw new InvalidOperationException("'Player' entity not specified.");
             }
 
+            // Allocate and assign camera.
             camera = new GameplayCamera(game.GraphicsDevice, 
                 new Rectangle(0, 0, map.WidthInPixels, map.HeightInPixels),
                 Game1.InternalResolution);
 
             camera.Follow(player);
 
+            // Log end-of-load message.
             Console.WriteLine("Load successful.");
             for (int i = 0; i < logLoadBanner.Length; ++i) { Console.Write('='); }
             Console.WriteLine();
@@ -149,6 +155,7 @@ namespace SuperWizardPlatformer
             }
 
             // One step of the physics simulation forward
+            // TODO: Assuming 60 hz might not be best thing long term?
             PhysicsWorld.Step(1.0f / 60.0f);
         }
 

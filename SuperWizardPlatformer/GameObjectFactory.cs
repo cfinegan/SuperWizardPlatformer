@@ -9,25 +9,31 @@ using System.Text;
 namespace SuperWizardPlatformer
 {
     /// <summary>
-    /// Used to insert new game objects into an existing scene, for the purposes of both constructing
-    /// the scene and adding new objects to it during gameplay. The eventual goal of this class is
-    /// for all garbage to be generated during construction and the PopulateScene method, so that
-    /// individual calls to methods that insert new objects do not trigger GC collections.
+    /// Allocates Entities and tracks how many have been allocated total, so that the scene knows
+    /// how large to keep its buffers in case all entities are active at once.
     /// </summary>
     class GameObjectFactory
     {
         private World physicsWorld;
 
-        public GameObjectFactory(IScene scene)
+        private List<IEntity> allocatedEntities = new List<IEntity>();
+
+        public GameObjectFactory(World physicsWorld)
         {
-            if (scene == null) { throw new ArgumentNullException(nameof(scene)); }
+            if (physicsWorld == null) { throw new ArgumentNullException(nameof(physicsWorld)); }
             
-            physicsWorld = scene.PhysicsWorld;
+            this.physicsWorld = physicsWorld;
         }
 
-        public List<IEntity> AllocatedEntities { get; private set; } = new List<IEntity>();
+        public int EntityCount
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+        }
 
-        public void PopulateScene(TiledMap map)
+        public List<IEntity> PopulateScene(TiledMap map)
         {
             foreach (var objGroup in map.ObjectGroups)
             {
@@ -37,12 +43,12 @@ namespace SuperWizardPlatformer
 
                     if ("player".Equals(obj.Type, StringComparison.OrdinalIgnoreCase))
                     {
-                        AllocatedEntities.Add(new Player(
+                        allocatedEntities.Add(new Player(
                             physicsWorld, obj, map.GetTileRegion((int)obj.Gid)));
                     }
                     else if (obj.ObjectType == TiledObjectType.Tile)
                     {
-                        AllocatedEntities.Add(new DrawableEntity(
+                        allocatedEntities.Add(new DrawableEntity(
                             physicsWorld, obj, map.GetTileRegion((int)obj.Gid)));
                     }
                     else if (obj.ObjectType == TiledObjectType.Rectangle)
@@ -56,6 +62,8 @@ namespace SuperWizardPlatformer
                     }
                 }
             }
+
+            return allocatedEntities;
         }
 
         private void CreateRectangle(TiledObject obj)
