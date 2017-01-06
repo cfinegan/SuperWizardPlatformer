@@ -1,7 +1,9 @@
 ﻿using FarseerPhysics;
 using FarseerPhysics.Dynamics;
+using FarseerPhysics.Factories;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using MonoGame.Extended.Maps.Tiled;
 using MonoGame.Extended.Sprites;
 using MonoGame.Extended.TextureAtlases;
 using SuperWizardPlatformer.Input;
@@ -11,8 +13,7 @@ namespace SuperWizardPlatformer
 {
     class Player : IEntity, IDrawable
     {
-        public static float Density { get; } = 1.0f;
-
+        private Vector2 halfSize;
         private Sprite sprite;
 
         public Player(Body body, TextureRegion2D textureRegion)
@@ -23,6 +24,34 @@ namespace SuperWizardPlatformer
             Body = body;
             Body.UserData = this;
             sprite = new Sprite(textureRegion);
+        }
+
+        public Player(World world, TiledObject obj, TextureRegion2D textureRegion)
+        {
+            if (world == null) { throw new ArgumentNullException(nameof(world)); }
+            if (obj == null) { throw new ArgumentNullException(nameof(obj)); }
+            if (textureRegion == null) { throw new ArgumentNullException(nameof(textureRegion)); }
+
+            sprite = new Sprite(textureRegion);
+
+            float bodyWidth = ConvertUnits.ToSimUnits(textureRegion.Width);
+            float bodyHeight = ConvertUnits.ToSimUnits(textureRegion.Height);
+
+            Body = BodyFactory.CreateRectangle(world, bodyWidth, bodyHeight, 1.0f);
+
+            halfSize = new Vector2(bodyWidth / 2.0f, bodyHeight / 2.0f);
+
+            // Note that for TiledObjects of type 'Tiled', obj.Y is the BOTTOM of the rectangle.
+            var bodyCenter = ConvertUnits.ToSimUnits(new Vector2(
+                obj.X + halfSize.X,
+                obj.Y - halfSize.Y));
+
+            Body.Position = ConvertUnits.ToSimUnits(new Vector2(obj.X, obj.Y));
+
+            Body.BodyType = BodyType.Dynamic;
+            Body.OnCollision += ContactListener.OnCollision;
+            Body.FixedRotation = true;
+            Body.UserData = this;
         }
 
         public Body Body { get; private set; }
@@ -61,12 +90,15 @@ namespace SuperWizardPlatformer
 
         public void Draw(SpriteBatch spriteBatch)
         {
-            double posX = Math.Round(ConvertUnits.ToDisplayUnits(Body.Position.X));
-            double posY = Math.Round(ConvertUnits.ToDisplayUnits(Body.Position.Y));
+            if (IsVisible)
+            {
+                double posX = Math.Round(ConvertUnits.ToDisplayUnits(Body.Position.X));
+                double posY = Math.Round(ConvertUnits.ToDisplayUnits(Body.Position.Y));
 
-            sprite.Position = new Vector2((float)posX, (float)posY);
-            
-            spriteBatch.Draw(sprite);
+                sprite.Position = new Vector2((float)posX, (float)posY);
+
+                spriteBatch.Draw(sprite);
+            }
         }
 
         public bool OnCollision(IEntity other)

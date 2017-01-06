@@ -40,6 +40,8 @@
  <objectgroup name="Object Layer 1">
   <object id="2" name="CloudGuy" gid="79" x="64" y="224" width="16" height="16">
    <properties>
+    <property name="DENSITY" value="1.1"/>
+    <property name="density" value="2.5"/>
     <property name="physics" value="dynamic"/>
    </properties>
   </object>

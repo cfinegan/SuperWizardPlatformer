@@ -1,25 +1,32 @@
-﻿using FarseerPhysics.Dynamics;
+﻿using FarseerPhysics;
+using FarseerPhysics.Dynamics;
+using FarseerPhysics.Factories;
 using Microsoft.Xna.Framework;
+using MonoGame.Extended.Maps.Tiled;
 using System;
+using System.Diagnostics;
 
 namespace SuperWizardPlatformer
 {
     abstract class Entity : IEntity
     {
-        public Entity(Body body, bool isVisible = true)
+        public Entity(World world, TiledObject obj)
         {
-            if (body == null) { throw new ArgumentNullException(nameof(body)); }
+            if (world == null) { throw new ArgumentNullException(nameof(world)); }
+            if (obj == null) { throw new ArgumentNullException(nameof(obj)); }
 
-            IsVisible = isVisible;
-            Body = body;
-            Body.UserData = this;
+            Body = BodyFactory.CreateRectangle(world, ConvertUnits.ToSimUnits(obj.Width),
+                ConvertUnits.ToSimUnits(obj.Height), obj.GetDensity(), this);
+
+            Body.OnCollision += ContactListener.OnCollision;
+            Body.FixedRotation = true;
         }
 
         public Body Body { get; private set; }
 
         public bool IsMarkedForRemoval { get; set; } = false;
 
-        public bool IsVisible { get; set; }
+        public bool IsVisible { get; set; } = true;
 
         public abstract void Update(IScene scene, GameTime gameTime);
 
