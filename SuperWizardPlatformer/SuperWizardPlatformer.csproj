@@ -53,6 +53,7 @@
     <ApplicationIcon>Icon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Coin.cs" />
     <Compile Include="ContactListener.cs" />
     <Compile Include="DrawableEntity.cs" />
     <Compile Include="Entity.cs" />

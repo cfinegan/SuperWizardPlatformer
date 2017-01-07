@@ -30,6 +30,8 @@ namespace SuperWizardPlatformer
             Body.BodyType = BodyType.Dynamic;
         }
 
+        public int CoinsCollected { get; set; } = 0;
+
         private void StandingUpdate()
         {
             if (ActionMapper.JustPressed(UserAction.Jump))
@@ -103,13 +105,12 @@ namespace SuperWizardPlatformer
 
         public override bool OnCollision(IEntity other)
         {
-            other.IsVisible = false;
             return true;
         }
 
         public override void OnSeparation(IEntity other)
         {
-            other.IsVisible = true;
+            return;
         }
     }
 }

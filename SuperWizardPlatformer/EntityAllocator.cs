@@ -1,6 +1,8 @@
 ﻿using FarseerPhysics;
 using FarseerPhysics.Dynamics;
 using FarseerPhysics.Factories;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.Maps.Tiled;
 using System;
 using System.Collections.Generic;
@@ -58,6 +60,11 @@ namespace SuperWizardPlatformer
                             throw new InvalidSceneDataException(
                                 "Cannot have more than one player.", nameof(map));
                         }
+                    }
+                    else if ("coin".Equals(obj.Type, StringComparison.OrdinalIgnoreCase))
+                    {
+                        allocatedEntities.Add(new Coin(
+                            physicsWorld, obj, map.GetTileRegion((int)obj.Gid)));
                     }
                     else if (obj.ObjectType == TiledObjectType.Tile)
                     {
