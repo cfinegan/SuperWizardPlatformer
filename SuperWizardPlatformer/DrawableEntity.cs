@@ -45,5 +45,10 @@ namespace SuperWizardPlatformer
         {
             return true;
         }
+
+        public override void OnSeparation(IEntity other)
+        {
+            return; // Do nothing by default.
+        }
     }
 }

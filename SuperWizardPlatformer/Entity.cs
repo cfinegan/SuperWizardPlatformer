@@ -18,6 +18,7 @@ namespace SuperWizardPlatformer
                 ConvertUnits.ToSimUnits(obj.Height), obj.GetDensity(), this);
 
             Body.OnCollision += ContactListener.OnCollision;
+            Body.OnSeparation += ContactListener.OnSeparation;
             Body.FixedRotation = true;
         }
 
@@ -30,5 +31,7 @@ namespace SuperWizardPlatformer
         public abstract void Update(IScene scene, GameTime gameTime);
 
         public abstract bool OnCollision(IEntity other);
+
+        public abstract void OnSeparation(IEntity other);
     }
 }

@@ -14,5 +14,7 @@ namespace SuperWizardPlatformer
         void Update(IScene scene, GameTime gameTime);
 
         bool OnCollision(IEntity other);
+
+        void OnSeparation(IEntity other);
     }
 }

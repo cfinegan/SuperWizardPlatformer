@@ -49,9 +49,7 @@ namespace SuperWizardPlatformer
         {
             Body.ApplyLinearImpulse(new Vector2(0, -JUMP_IMPULSE));
 
-            jumpFramesRemaining -= 1;
-
-            if (jumpFramesRemaining <= 0 || !ActionMapper.IsPressed(UserAction.Jump))
+            if (--jumpFramesRemaining <= 0 || !ActionMapper.IsPressed(UserAction.Jump))
             {
                 state = States.Falling;
             }
@@ -105,8 +103,13 @@ namespace SuperWizardPlatformer
 
         public override bool OnCollision(IEntity other)
         {
-            other.IsMarkedForRemoval = true;
-            return false;
+            other.IsVisible = false;
+            return true;
+        }
+
+        public override void OnSeparation(IEntity other)
+        {
+            other.IsVisible = true;
         }
     }
 }

@@ -17,5 +17,15 @@ namespace SuperWizardPlatformer
 
             return true;
         }
+
+        public static void OnSeparation(Fixture A, Fixture B)
+        {
+            Debug.Assert(A.Body.UserData != null);
+
+            if (A.Body.UserData != null && B.Body.UserData != null)
+            {
+                ((IEntity)A.Body.UserData).OnSeparation((IEntity)B.Body.UserData);
+            }
+        }
     }
 }
