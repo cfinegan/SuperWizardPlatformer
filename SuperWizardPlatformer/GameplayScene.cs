@@ -21,7 +21,7 @@ namespace SuperWizardPlatformer
         private ContentManager content;
         private TiledMap map;
         private SpriteBatch spriteBatch;
-        private EntityAllocator factory;
+        private EntityFactory factory;
         private GameplayCamera camera;
         private Player player;
 
@@ -47,7 +47,7 @@ namespace SuperWizardPlatformer
             content = new ContentManager(game.Services, game.Content.RootDirectory);
             map = content.Load<TiledMap>(mapName);
             spriteBatch = new SpriteBatch(game.GraphicsDevice);
-            factory = new EntityAllocator(physicsWorld);
+            factory = new EntityFactory(physicsWorld);
             bgColor = map.BackgroundColor ?? BGCOLOR_DEFAULT;
 
             Console.WriteLine("Background Color: {0}", map.BackgroundColor);
