@@ -119,8 +119,8 @@ namespace SuperWizardPlatformer
 
             if (!string.IsNullOrWhiteSpace(obj.Type)) { desc.AppendFormat("Type: {0} | ", obj.Type); }
 
-            desc.AppendFormat("Width: {0} | Height: {1} | Rotation: {2} | Visible: {3}",
-                obj.Width, obj.Height, obj.Rotation, obj.IsVisible);
+            desc.AppendFormat("Pos: ({0}, {1}) | Width: {2} | Height: {3} | Rotation: {4} | Visible: {5}",
+                obj.X, obj.Y, obj.Width, obj.Height, obj.Rotation, obj.IsVisible);
 
             desc.AppendLine();
 
