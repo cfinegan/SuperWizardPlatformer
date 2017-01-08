@@ -13,14 +13,13 @@ namespace SuperWizardPlatformer
         private Vector2 halfSize;
         private TextureRegion2D textureRegion;
 
-        public DrawableEntity(World world, TiledObject obj, TextureRegion2D textureRegion, bool isVisible = true)
+        public DrawableEntity(World world, TiledObject obj, TextureRegion2D textureRegion)
             : base(world, obj)
         {
             if (textureRegion == null) { throw new ArgumentNullException(nameof(textureRegion)); }
 
             halfSize = ConvertUnits.ToSimUnits(new Vector2(obj.Width / 2.0f, obj.Height / 2.0f));
             this.textureRegion = textureRegion;
-            IsVisible = isVisible;
             Body.Position = obj.GetObjectCenter();
             Body.BodyType = obj.GetBodyType();
         }
