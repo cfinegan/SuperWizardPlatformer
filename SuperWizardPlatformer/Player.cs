@@ -18,23 +18,26 @@ namespace SuperWizardPlatformer
         }
 
         private const float WALK_IMPULSE = 0.0035f;
+        private const float MAX_HORIZONTAL_SPEED = 1.0f;
         private const float JUMP_IMPULSE = 0.01f;
-        private const int JUMP_FRAMES = 15;
+        private const int JUMP_FRAMES = 13;
 
         private States state = States.Standing;
         private int jumpFramesRemaining = 0;
+        private Vector2 lastVelocity;
 
         public Player(World world, TiledObject obj, TextureRegion2D textureRegion)
             : base(world, obj, textureRegion)
         {
             Body.BodyType = BodyType.Dynamic;
+            lastVelocity = Body.LinearVelocity;
         }
 
         public int CoinsCollected { get; set; } = 0;
 
         private void StandingUpdate()
         {
-            if (ActionMapper.JustPressed(UserAction.Jump))
+            if (ActionMapper.IsPressed(UserAction.Jump))
             {
                 Jump();
             }
@@ -59,9 +62,10 @@ namespace SuperWizardPlatformer
 
         private void FallingUpdate()
         {
-            if (Body.LinearVelocity.Y == 0)
+            if (Body.LinearVelocity.Y == 0 && lastVelocity.Y > 0)
             {
                 state = States.Standing;
+                StandingUpdate();
             }
         }
 
@@ -101,6 +105,17 @@ namespace SuperWizardPlatformer
             }
 
             Body.ApplyLinearImpulse(new Vector2(xVel, 0));
+
+            if (Body.LinearVelocity.X > MAX_HORIZONTAL_SPEED)
+            {
+                Body.LinearVelocity = new Vector2(MAX_HORIZONTAL_SPEED, Body.LinearVelocity.Y);
+            }
+            else if (Body.LinearVelocity.X < -MAX_HORIZONTAL_SPEED)
+            {
+                Body.LinearVelocity = new Vector2(-MAX_HORIZONTAL_SPEED, Body.LinearVelocity.Y);
+            }
+
+            lastVelocity = Body.LinearVelocity;
         }
 
         public override bool OnCollision(IEntity other)
