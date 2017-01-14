@@ -57,6 +57,7 @@
     <Compile Include="ContactListener.cs" />
     <Compile Include="DrawableEntity.cs" />
     <Compile Include="Entity.cs" />
+    <Compile Include="EntityContainer.cs" />
     <Compile Include="Input\GamePadButtons.cs" />
     <Compile Include="Input\GamePadStateTracker.cs" />
     <Compile Include="GameplayCamera.cs" />
