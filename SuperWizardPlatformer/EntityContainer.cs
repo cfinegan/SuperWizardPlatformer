@@ -78,48 +78,31 @@ namespace SuperWizardPlatformer
         /// </summary>
         public void RemoveMarkedElements()
         {
-            RemoveMarkedEntities();
-            RemoveMarkedDrawables();
+            RemoveMarkedElements(_activeEntities);
+            RemoveMarkedElements(_activeDrawables);
         }
 
         /// <summary>
-        /// Removes all IEntity objects from the collection which are marked for removal.
+        /// Removes all marked IRemovable objects from the specified list.
         /// </summary>
-        private void RemoveMarkedEntities()
+        /// <typeparam name="T">Type implementing IRemovable.</typeparam>
+        /// <param name="list">The list to scan for marked objects.</param>
+        /// <seealso cref="IRemovable"/>
+        private static void RemoveMarkedElements<T>(List<T> list) where T : IRemovable
         {
-            int count = _activeEntities.Count;
+            int count = list.Count;
             int removed = 0;
             for (int i = 0; i < count; ++i)
             {
-                if (_activeEntities[i].IsMarkedForRemoval)
+                if (list[i].IsMarkedForRemoval)
                 {
-                    var tmp = _activeEntities[i];
-                    _activeEntities[i] = _activeEntities[count - 1 - removed];
-                    _activeEntities[count - 1 - removed] = tmp;
+                    var tmp = list[i];
+                    list[i] = list[count - 1 - removed];
+                    list[count - 1 - removed] = tmp;
                     ++removed;
                 }
             }
-            _activeEntities.RemoveRange(count - removed, removed);
-        }
-
-        /// <summary>
-        /// Removes all IDrawable objects from the collection which are marked for removal.
-        /// </summary>
-        private void RemoveMarkedDrawables()
-        {
-            int count = _activeDrawables.Count;
-            int removed = 0;
-            for (int i = 0; i < count; ++i)
-            {
-                if (_activeDrawables[i].IsMarkedForRemoval)
-                {
-                    var tmp = _activeDrawables[i];
-                    _activeDrawables[i] = _activeDrawables[count - 1 - removed];
-                    _activeDrawables[count - 1 - removed] = tmp;
-                    ++removed;
-                }
-            }
-            _activeDrawables.RemoveRange(count - removed, removed);
+            list.RemoveRange(count - removed, removed);
         }
     }
 }

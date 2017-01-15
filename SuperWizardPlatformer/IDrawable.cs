@@ -2,10 +2,8 @@
 
 namespace SuperWizardPlatformer
 {
-    interface IDrawable
+    interface IDrawable : IRemovable
     {
-        bool IsMarkedForRemoval { get; set; }
-
         void Draw(SpriteBatch spriteBatch);
     }
 }

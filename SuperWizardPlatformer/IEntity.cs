@@ -3,11 +3,9 @@ using Microsoft.Xna.Framework;
 
 namespace SuperWizardPlatformer
 {
-    interface IEntity
+    interface IEntity : IRemovable
     {
         Body Body { get; }
-
-        bool IsMarkedForRemoval { get; set; }
 
         bool IsVisible { get; set; }
 
