@@ -27,14 +27,6 @@ namespace SuperWizardPlatformer
             this.physicsWorld = physicsWorld;
         }
 
-        public int EntityCount
-        {
-            get
-            {
-                return allocatedEntities.Count;
-            }
-        }
-
         public List<IEntity> PopulateScene(TiledMap map)
         {
             if (map == null) { throw new ArgumentNullException(nameof(map)); }

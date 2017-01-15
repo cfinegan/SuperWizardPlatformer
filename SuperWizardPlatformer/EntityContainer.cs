@@ -47,6 +47,9 @@ namespace SuperWizardPlatformer
         // Note: using foreach on this interface will generate garbage. Use explicit indexing.
         public IReadOnlyList<IDrawable> ActiveDrawables => _activeDrawables;
 
+        // The current player-controlled game entitiy.
+        public Player Player { get; private set; }
+
         /// <summary>
         /// Adds a new entity to the collection. Also adds it as an IDrawable, depending on 
         /// its type.
@@ -71,6 +74,12 @@ namespace SuperWizardPlatformer
                 }
                 _activeDrawables.Add(drawableCheck);
             }
+
+            var playerCheck = entity as Player;
+            if (playerCheck != null)
+            {
+                Player = playerCheck;
+            }
         }
 
         /// <summary>
@@ -92,7 +101,7 @@ namespace SuperWizardPlatformer
         {
             int count = list.Count;
             int removed = 0;
-            for (int i = 0; i < count; ++i)
+            for (int i = 0; i < count - removed; ++i)
             {
                 if (list[i].IsMarkedForRemoval)
                 {
