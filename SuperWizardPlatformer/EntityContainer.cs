@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace SuperWizardPlatformer
 {
@@ -9,27 +10,34 @@ namespace SuperWizardPlatformer
     /// </summary>
     class EntityContainer
     {
-        // Initial number of IEntity and IDrawable references allocated. Intentionally high to
-        // avoid resizing.
-        private const int INIT_CAPACITY = 250;
+        // Default number of IEntity and IDrawable references initially allocated. Intentionally 
+        // high to avoid resizing.
+        private const int DEFAULT_CAPACITY = 250;
 
         // List of active IEntity objects.
-        private List<IEntity> _activeEntities = new List<IEntity>(INIT_CAPACITY);
+        private readonly List<IEntity> _activeEntities;
 
         // List of active IDrawable objects.
-        private List<IDrawable> _activeDrawables = new List<IDrawable>(INIT_CAPACITY);
+        private readonly List<IDrawable> _activeDrawables;
 
         /// <summary>
-        /// Constructs an EntityContainer with zero elements.
+        /// Constructs an EntityContainer with zero elements and the default initial capacity..
         /// </summary>
-        public EntityContainer() { }
+        public EntityContainer() : this(DEFAULT_CAPACITY) { }
 
         /// <summary>
         /// Constructs an EntityContainer from a list of IEntity objects. Uses the AddEntity
         /// method to insert each entity.
         /// </summary>
         /// <param name="entities">Entities to add to the collection of active entities.</param>
-        public EntityContainer(List<IEntity> entities)
+        public EntityContainer(List<IEntity> entities) : this(entities, DEFAULT_CAPACITY) { }
+
+        /// <summary>
+        /// Constructs an EntityContainer from a list of IEntity objects and an initial capacity.
+        /// </summary>
+        /// <param name="entities">Entities to add to the collection of active entities.</param>
+        /// <param name="capacity">Initial capacity.</param>
+        public EntityContainer(List<IEntity> entities, int capacity) : this(capacity)
         {
             if (entities == null) { throw new ArgumentNullException(nameof(entities)); }
 
@@ -37,6 +45,17 @@ namespace SuperWizardPlatformer
             {
                 AddEntity(e);
             }
+        }
+
+        /// <summary>
+        /// Constructs an EntityContainer from a capacity. This is the most basic constructor
+        /// which allocates the object lists. All other constructors should call this one.
+        /// </summary>
+        /// <param name="capacity">Initial capacity.</param>
+        public EntityContainer(int capacity)
+        {
+            _activeEntities = new List<IEntity>(capacity);
+            _activeDrawables = new List<IDrawable>(capacity);
         }
 
         // Readonly interface to the list of active IEntity objects.
