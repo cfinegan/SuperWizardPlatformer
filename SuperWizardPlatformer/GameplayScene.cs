@@ -4,7 +4,6 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.Maps.Tiled;
 using System;
-using System.Collections.Generic;
 
 namespace SuperWizardPlatformer
 {
