@@ -16,7 +16,7 @@ namespace SuperWizardPlatformer
         public static Size InternalResolution { get; } = new Size(420, 240);
 
         private GraphicsDeviceManager graphics;
-        private WindowModeAdjuster resolution;
+        private WindowResizer resizer;
         private RenderTarget2D renderTarget;
         private SpriteBatch spriteBatch;
         private IScene scene;
@@ -35,12 +35,7 @@ namespace SuperWizardPlatformer
         /// </summary>
         protected override void Initialize()
         {
-            Services.AddService(graphics);
-
-            resolution = new WindowModeAdjuster(this);
-
-            // Load default screen configuration.
-            EnableDefaultScreenProperties();
+            resizer = new WindowResizer(graphics, this);
 
             // Render target is used to separate internal resolution from display resolution.
             renderTarget = new RenderTarget2D(GraphicsDevice, 
@@ -97,7 +92,7 @@ namespace SuperWizardPlatformer
             }
             if (KeyStateTracker.IsAltEnterJustPressed)
             {
-                resolution.ToggleBorderlessFullscreen();
+                resizer.ToggleBorderlessFullscreen();
             }
             if (Debugger.IsAttached && !graphics.IsFullScreen && KeyStateTracker.JustPressed(Keys.F5))
             {
@@ -123,43 +118,10 @@ namespace SuperWizardPlatformer
             // Draw render target to screen.
             GraphicsDevice.Clear(Color.Black);
             spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Opaque, SamplerState.PointClamp);
-            spriteBatch.Draw(renderTarget, CalculateViewRectangle(), Color.White);
+            spriteBatch.Draw(renderTarget, resizer.ViewRectangle, Color.White);
             spriteBatch.End();
 
             base.Draw(gameTime);
-        }
-
-        /// <summary>
-        /// Calculates the correct rectangle for drawing scaled graphical output to the screen
-        /// without stretching.
-        /// </summary>
-        /// <returns>Rectangle representing the region of the screen to draw.</returns>
-        private Rectangle CalculateViewRectangle()
-        {
-            float outputAspect = Window.ClientBounds.Width /
-                (float)Window.ClientBounds.Height;
-
-            float preferredAspect = renderTarget.Width /
-                (float)renderTarget.Height;
-
-            Rectangle dst;
-
-            if (outputAspect <= preferredAspect)
-            {
-                // Output is taller than it is wide, bars on top/bottom.
-                int presentHeight = (int)((Window.ClientBounds.Width / preferredAspect) + 0.5f);
-                int barHeight = (Window.ClientBounds.Height - presentHeight) / 2;
-                dst = new Rectangle(0, barHeight, Window.ClientBounds.Width, presentHeight);
-            }
-            else
-            {
-                // Output is wider than it is tall, bars on left/right.
-                int presentWidth = (int)((Window.ClientBounds.Height * preferredAspect) + 0.5f);
-                int barWidth = (Window.ClientBounds.Width - presentWidth) / 2;
-                dst = new Rectangle(barWidth, 0, presentWidth, Window.ClientBounds.Height);
-            }
-
-            return dst;
         }
 
         private void LoadScene(IScene scene)
@@ -176,20 +138,6 @@ namespace SuperWizardPlatformer
         private void UnloadScene()
         {
             LoadScene(null);
-        }
-
-        /// <summary>
-        /// In debug mode, the default screen config is a normal bordered window. In release mode,
-        /// however, the default is fullscreen (this is a snappier presentation for people who
-        /// haven't seen the game before).
-        /// </summary>
-        private void EnableDefaultScreenProperties()
-        {
-#if DEBUG
-            resolution.EnableBorderedWindow();
-#else
-            resolution.EnableBorderlessFullscreen();
-#endif
         }
     }
 }

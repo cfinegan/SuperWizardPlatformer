@@ -79,7 +79,7 @@
     <Compile Include="Input\UserAction.cs" />
     <Compile Include="TiledMapExtensions.cs" />
     <Compile Include="TiledObjectExtensions.cs" />
-    <Compile Include="WindowModeAdjuster.cs" />
+    <Compile Include="WindowResizer.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="FarseerPhysics MonoGame, Version=3.5.0.40766, Culture=neutral, processorArchitecture=MSIL">
