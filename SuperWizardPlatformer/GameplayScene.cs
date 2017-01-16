@@ -39,15 +39,15 @@ namespace SuperWizardPlatformer
                 throw new ArgumentNullException(nameof(mapName));
             }
 
-            // Instantiate member objects.
             content = new ContentManager(game.Services, game.Content.RootDirectory);
             map = content.Load<TiledMap>(mapName);
+
+            map.WriteInfo();
+
             spriteBatch = new SpriteBatch(game.GraphicsDevice);
             factory = new EntityFactory(physicsWorld);
             container = new EntityContainer(factory.PopulateScene(map));
             bgColor = map.BackgroundColor ?? Color.Black;
-
-            Console.WriteLine("Background Color: {0}", map.BackgroundColor);
             
             MapBoundaryFactory.CreateAllBoundaries(physicsWorld, map);
 
