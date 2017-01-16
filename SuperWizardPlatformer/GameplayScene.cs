@@ -77,6 +77,8 @@ namespace SuperWizardPlatformer
         {
             container.RemoveMarkedElements();
 
+            // Use this count as upper bound so that elements added during loop are not updated 
+            // this frame.
             int count = container.ActiveEntities.Count;
 
             // Using explicit indexing because ActiveEntities is an interface.
