@@ -11,7 +11,6 @@ namespace SuperWizardPlatformer
     {
         private const int CAPACITY_DEFAULT = 32;
         private const float GRAVITY_DEFAULT = 9.8f;
-        private static readonly Color BGCOLOR_DEFAULT = Color.Black;
 
         private World physicsWorld = new World(new Vector2(0, GRAVITY_DEFAULT));
         private Color bgColor;
@@ -46,7 +45,7 @@ namespace SuperWizardPlatformer
             spriteBatch = new SpriteBatch(game.GraphicsDevice);
             factory = new EntityFactory(physicsWorld);
             container = new EntityContainer(factory.PopulateScene(map));
-            bgColor = map.BackgroundColor ?? BGCOLOR_DEFAULT;
+            bgColor = map.BackgroundColor ?? Color.Black;
 
             Console.WriteLine("Background Color: {0}", map.BackgroundColor);
             
