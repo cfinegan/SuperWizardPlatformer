@@ -29,20 +29,21 @@ namespace SuperWizardPlatformer
         /// method to insert each entity.
         /// </summary>
         /// <param name="entities">Entities to add to the collection of active entities.</param>
-        public EntityContainer(List<IEntity> entities) : this(entities, DEFAULT_CAPACITY) { }
+        public EntityContainer(IReadOnlyList<IEntity> entities) : this(entities, DEFAULT_CAPACITY) { }
 
         /// <summary>
         /// Constructs an EntityContainer from a list of IEntity objects and an initial capacity.
         /// </summary>
         /// <param name="entities">Entities to add to the collection of active entities.</param>
         /// <param name="capacity">Initial capacity.</param>
-        public EntityContainer(List<IEntity> entities, int capacity) : this(capacity)
+        public EntityContainer(IReadOnlyList<IEntity> entities, int capacity) : this(capacity)
         {
             if (entities == null) { throw new ArgumentNullException(nameof(entities)); }
 
-            foreach (var e in entities)
+            // Using range-based for loop to avoid iterators on interface.
+            for (int i = 0; i < entities.Count; ++i)
             {
-                AddEntity(e);
+                AddEntity(entities[i]);
             }
         }
 
