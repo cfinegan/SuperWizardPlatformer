@@ -61,7 +61,6 @@
     <Compile Include="Input\GamePadButtons.cs" />
     <Compile Include="Input\GamePadStateTracker.cs" />
     <Compile Include="GameplayCamera.cs" />
-    <Compile Include="IEntityContainer.cs" />
     <Compile Include="Game1.cs" />
     <Compile Include="EntityFactory.cs" />
     <Compile Include="GameplayScene.cs" />
