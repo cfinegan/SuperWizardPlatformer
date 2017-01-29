@@ -29,7 +29,7 @@ namespace SuperWizardPlatformer
         public GameplayScene(Game game, string mapName)
         {
             // Log start-of-load message.
-            var logLoadBanner = string.Format("====== Loading TMX map '{0}' ======", mapName);
+            var logLoadBanner = $"====== Loading TMX map '{mapName}' ======";
             Console.WriteLine(logLoadBanner);
 
             // Check arguments for null.

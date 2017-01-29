@@ -72,6 +72,9 @@
     <Compile Include="IRemovable.cs" />
     <Compile Include="IScene.cs" />
     <Compile Include="MapBoundaryFactory.cs" />
+    <Compile Include="Physics\IPhysicsObject.cs" />
+    <Compile Include="Physics\MovementType.cs" />
+    <Compile Include="Physics\WorldSimulator.cs" />
     <Compile Include="Player.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

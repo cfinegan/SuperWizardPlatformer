@@ -135,11 +135,7 @@ namespace SuperWizardPlatformer
         /// </summary>
         private void EnableDefaultScreenProperties()
         {
-#if DEBUG
-            EnableBorderedWindow();
-#else
             EnableBorderlessFullscreen();
-#endif
         }
     }
 }
